@@ -1,7 +1,8 @@
+import supabaseClient from "./supabaseClient";
 import { useState } from "react";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function RegisterForm({ supabaseClient }) {
+function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,13 +13,18 @@ function RegisterForm({ supabaseClient }) {
 
     try {
       setLoading(true);
-      const { user, session, error } = await supabaseClient.auth.signUp(
-        { email, password },
-        { data: { username: name } }
+      const { user, session, signUpError } = await supabaseClient.auth.signUp({
+        email,
+        password,
+      });
+
+      const { upsertError } = await supabaseClient.from("profiles").upsert(
+        { id: user.id, username: name, updated_at: new Date() },
+        { returning: "minimal" } // Don't return the value after inserting
       );
 
-      if (error) {
-        throw error;
+      if (signUpError || upsertError) {
+        throw signUpError || upsertError;
       }
       alert("Successfully created new user.");
     } catch (error) {

@@ -1,7 +1,8 @@
+import supabaseClient from "./supabaseClient";
 import { useState } from "react";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-function LoginForm({ supabaseClient }) {
+function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -11,15 +12,21 @@ function LoginForm({ supabaseClient }) {
 
     try {
       setLoading(true);
-      const { user, session, error } = await supabaseClient.auth.signIn({
+      const { user, signInError } = await supabaseClient.auth.signIn({
         email,
         password,
       });
 
-      if (error) {
-        throw error;
+      const { data, fetchError } = await supabaseClient
+        .from("profiles")
+        .select()
+        .eq("id", user.id)
+        .single();
+
+      if (signInError || fetchError) {
+        throw signInError || fetchError;
       }
-      alert("Successfully logged in.");
+      alert(`Successfully logged in. Welcome back ${data.username}`);
     } catch (error) {
       console.log(error.error_description || error.message);
     } finally {

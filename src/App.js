@@ -21,7 +21,7 @@ function App() {
       {session ? (
         <Account supabaseClient={supabaseClient} session={session} />
       ) : (
-        <LoginForm supabaseClient={supabaseClient} />
+        <LoginForm />
       )}
     </>
   );

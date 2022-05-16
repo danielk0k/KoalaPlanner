@@ -12,9 +12,9 @@ function Account({ supabaseClient, session }) {
       const user = supabaseClient.auth.user();
 
       let { data, error, status } = await supabaseClient
-        .from('profiles')
+        .from("profiles")
         .select(`username, avatar_url`)
-        .eq('id', user.id)
+        .eq("id", user.id)
         .single();
 
       if (error && status !== 406) {
@@ -32,7 +32,7 @@ function Account({ supabaseClient, session }) {
   };
 
   const updateProfile = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
 
     try {
       setLoading(true);
@@ -44,8 +44,8 @@ function Account({ supabaseClient, session }) {
         updated_at: new Date(),
       };
 
-      let { error } = await supabaseClient.from('profiles').upsert(updates, {
-        returning: 'minimal', // Don't return the value after inserting
+      let { error } = await supabaseClient.from("profiles").upsert(updates, {
+        returning: "minimal", // Don't return the value after inserting
       });
 
       if (error) {
@@ -61,7 +61,7 @@ function Account({ supabaseClient, session }) {
   return (
     <div aria-live="polite">
       {loading ? (
-        'Saving ...'
+        "Saving ..."
       ) : (
         <form onSubmit={updateProfile} className="form-widget">
           <div>Email: {session.user.email}</div>
@@ -70,7 +70,7 @@ function Account({ supabaseClient, session }) {
             <input
               id="username"
               type="text"
-              value={username || ''}
+              value={username || ""}
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
@@ -81,11 +81,15 @@ function Account({ supabaseClient, session }) {
           </div>
         </form>
       )}
-      <button type="button" className="button block" onClick={() => supabaseClient.auth.signOut()}>
+      <button
+        type="button"
+        className="button block"
+        onClick={() => supabaseClient.auth.signOut()}
+      >
         Sign Out
       </button>
     </div>
-  )
+  );
 }
 
-export default Account
+export default Account;
