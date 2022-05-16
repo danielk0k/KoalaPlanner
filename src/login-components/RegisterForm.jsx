@@ -1,33 +1,41 @@
 import supabaseClient from "./supabaseClient";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
+  const navigate = useNavigate();
 
   const handleRegister = async (event) => {
     event.preventDefault();
 
     try {
       setLoading(true);
-      const { user, session, signUpError } = await supabaseClient.auth.signUp({
+      const { user, signUpError } = await supabaseClient.auth.signUp({
         email,
         password,
       });
+
+      if (signUpError) {
+        throw signUpError;
+      }
 
       const { upsertError } = await supabaseClient.from("profiles").upsert(
         { id: user.id, username: name, updated_at: new Date() },
         { returning: "minimal" } // Don't return the value after inserting
       );
 
-      if (signUpError || upsertError) {
-        throw signUpError || upsertError;
+      if (upsertError) {
+        throw upsertError;
       }
+
       alert("Successfully created new user.");
+      navigate("/home", { replace: true });
     } catch (error) {
+      alert("Error in creating new user.");
       console.log(error.error_description || error.message);
     } finally {
       setLoading(false);
@@ -76,7 +84,10 @@ function RegisterForm() {
       <button
         type="button"
         className="button block"
-        onClick={() => supabaseClient.auth.signOut()}
+        onClick={() => {
+          supabaseClient.auth.signOut();
+          navigate("/", { replace: true });
+        }}
       >
         Sign Out
       </button>

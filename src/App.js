@@ -16,15 +16,7 @@ function App() {
     });
   }, []);
 
-  return (
-    <>
-      {session ? (
-        <Account supabaseClient={supabaseClient} session={session} />
-      ) : (
-        <LoginForm />
-      )}
-    </>
-  );
+  return <>{session ? <Account /> : <LoginForm />}</>;
 }
 
 export default App;

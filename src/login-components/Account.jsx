@@ -1,19 +1,26 @@
+import supabaseClient from "./supabaseClient";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
-function Account({ supabaseClient, session }) {
+function Account() {
   const [loading, setLoading] = useState(false);
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState("");
+  const [newUsername, setNewUsername] = useState("");
+  const session = supabaseClient.auth.session();
+  const user = supabaseClient.auth.user();
+  const navigate = useNavigate();
 
-  useEffect(() => getProfile(), [session]);
+  useEffect(() => {
+    getProfile();
+  }, [session]);
 
   const getProfile = async () => {
     try {
       setLoading(true);
-      const user = supabaseClient.auth.user();
 
       let { data, error, status } = await supabaseClient
         .from("profiles")
-        .select(`username, avatar_url`)
+        .select(`username, website, avatar_url`)
         .eq("id", user.id)
         .single();
 
@@ -23,9 +30,10 @@ function Account({ supabaseClient, session }) {
 
       if (data) {
         setUsername(data.username);
+        setNewUsername(data.username);
       }
     } catch (error) {
-      console.log(error.message);
+      alert(error.message);
     } finally {
       setLoading(false);
     }
@@ -36,55 +44,57 @@ function Account({ supabaseClient, session }) {
 
     try {
       setLoading(true);
-      const user = supabaseClient.auth.user();
 
       const updates = {
         id: user.id,
-        username,
+        username: newUsername,
         updated_at: new Date(),
       };
 
-      let { error } = await supabaseClient.from("profiles").upsert(updates, {
-        returning: "minimal", // Don't return the value after inserting
-      });
+      const { upsertError } = await supabaseClient.from("profiles").upsert(
+        updates,
+        { returning: "minimal" } // Don't return the value after inserting
+      );
 
-      if (error) {
-        throw error;
+      setUsername(newUsername);
+
+      if (upsertError) {
+        throw upsertError;
       }
     } catch (error) {
-      alert(error.message);
+      alert("Error in updating profile.");
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div aria-live="polite">
-      {loading ? (
-        "Saving ..."
-      ) : (
-        <form onSubmit={updateProfile} className="form-widget">
-          <div>Email: {session.user.email}</div>
-          <div>
-            <label htmlFor="username">Name</label>
+    <div>
+      <h3>Welcome back {username}</h3>
+      <div>
+        {loading ? (
+          "Updating profile..."
+        ) : (
+          <form onSubmit={updateProfile}>
+            <label htmlFor="text">New Username:</label>
             <input
               id="username"
+              className="inputField"
               type="text"
-              value={username || ""}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(event) => setNewUsername(event.target.value)}
             />
-          </div>
-          <div>
-            <button className="button block primary" disabled={loading}>
-              Update profile
-            </button>
-          </div>
-        </form>
-      )}
+            <button>Submit</button>
+          </form>
+        )}
+      </div>
       <button
         type="button"
         className="button block"
-        onClick={() => supabaseClient.auth.signOut()}
+        onClick={() => {
+          supabaseClient.auth.signOut();
+          navigate("/", { replace: true });
+        }}
       >
         Sign Out
       </button>

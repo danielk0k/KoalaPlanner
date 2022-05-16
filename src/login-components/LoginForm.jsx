@@ -1,33 +1,31 @@
 import supabaseClient from "./supabaseClient";
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleLogin = async (event) => {
     event.preventDefault();
 
     try {
       setLoading(true);
-      const { user, signInError } = await supabaseClient.auth.signIn({
+      const { signInError } = await supabaseClient.auth.signIn({
         email,
         password,
       });
 
-      const { data, fetchError } = await supabaseClient
-        .from("profiles")
-        .select()
-        .eq("id", user.id)
-        .single();
-
-      if (signInError || fetchError) {
-        throw signInError || fetchError;
+      if (signInError) {
+        throw signInError;
       }
-      alert(`Successfully logged in. Welcome back ${data.username}`);
+
+      alert("Successfully logged in.");
+      navigate("/home", { replace: true });
     } catch (error) {
+      alert("Error in logging in.");
       console.log(error.error_description || error.message);
     } finally {
       setLoading(false);
@@ -68,7 +66,10 @@ function LoginForm() {
       <button
         type="button"
         className="button block"
-        onClick={() => supabaseClient.auth.signOut()}
+        onClick={() => {
+          supabaseClient.auth.signOut();
+          navigate("/", { replace: true });
+        }}
       >
         Sign Out
       </button>
