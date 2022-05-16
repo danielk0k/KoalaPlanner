@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { BrowserRouter, Link } from "react-router-dom";
-import LoginForm from "./LoginForm";
 
 function RegisterForm({ supabaseClient }) {
   const [loading, setLoading] = useState(false);
@@ -30,50 +29,53 @@ function RegisterForm({ supabaseClient }) {
   };
 
   return (
-    <BrowserRouter>
-      <div className="form_container">
-        <h2>Sign Up Here</h2>
-        <div>{
-          loading ? "Creating new user..."
-          : (
+    <div className="form_container">
+      <h2>Sign Up Here</h2>
+      <div>
+        {loading ? (
+          "Creating new user..."
+        ) : (
           <div className="login_form_fields">
             <form onSubmit={handleRegister}>
               <label htmlFor="text">Username:</label>
               <input
-              id="username"
-              className="inputField"
-              type="text"
-              onChange={(event) => setName(event.target.value)}
+                id="username"
+                className="inputField"
+                type="text"
+                onChange={(event) => setName(event.target.value)}
               />
               <br></br>
               <label htmlFor="email">Email:</label>
               <input
-              id="email"
-              className="inputField"
-              type="email"
-              onChange={(event) => setEmail(event.target.value)}
+                id="email"
+                className="inputField"
+                type="email"
+                onChange={(event) => setEmail(event.target.value)}
               />
               <br></br>
               <label htmlFor="password">Password:</label>
               <input
-              id="password"
-              className="inputField"
-              type="password"
-              onChange={(event) => setPassword(event.target.value)}
+                id="password"
+                className="inputField"
+                type="password"
+                onChange={(event) => setPassword(event.target.value)}
               />
               <br></br>
               <button>Submit</button>
             </form>
           </div>
-          )}
-        </div>
-        <Link to="/login">Sign in as current user</Link>
+        )}
       </div>
-      <button type="button" className="button block" onClick={() => supabaseClient.auth.signOut()}>
+      <Link to="/login">Sign in as current user</Link>
+      <button
+        type="button"
+        className="button block"
+        onClick={() => supabaseClient.auth.signOut()}
+      >
         Sign Out
       </button>
-    </BrowserRouter>
-)
+    </div>
+  );
 }
 
-export default RegisterForm
+export default RegisterForm;
