@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import supabaseClient from "./login-components/supabaseClient";
 import LoginForm from "./login-components/LoginForm";
-import Account from "./login-components/Account";
+// import Account from "./login-components/Account";
+import RegisterForm from "./login-components/RegisterForm";
+import { Route, Routes } from "react-router-dom";
 
 function App() {
   const [session , setSession] = useState(null);
@@ -12,15 +14,23 @@ function App() {
     
     // Listens to an auth event.
     supabaseClient.auth.onAuthStateChange((event, session) => {
-      console.log(event, session);
       setSession(session);
     });
   }, []);
   
   return (
-    <>
-      {session ? <Account supabaseClient={supabaseClient} session={session} /> : <LoginForm supabaseClient={supabaseClient} />}
-    </>
+    // <LoginForm supabaseClient={supabaseClient} />
+    // <>
+    //   {session ? <Account supabaseClient={supabaseClient} session={session} /> : <LoginForm supabaseClient={supabaseClient} />}
+    // </>
+    <div>
+      <RegisterForm supabaseClient={supabaseClient} />
+      <Routes>
+        <Route path="/" element={<App />}></Route>
+        <Route path="/register" element={<RegisterForm />}></Route>
+        <Route path="/login" element={<LoginForm />}></Route>
+      </Routes>
+    </div>
   )
 }
 

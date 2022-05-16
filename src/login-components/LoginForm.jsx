@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BrowserRouter, Link } from "react-router-dom";
 import RegisterForm from "./RegisterForm";
 
 function LoginForm({ supabaseClient }) {
@@ -25,28 +26,41 @@ function LoginForm({ supabaseClient }) {
   };
 
   return (
-    <div className="form_container">
-      <h2>Login Here</h2>
-      <p>{
-        loading ? "Logging In..."
-        : (
-        <div className="login_form_fields">
-          <form onSubmit={handleLogin}>
-            <label htmlFor="email">Email</label>
-            <input
-            id="email"
-            className="inputField"
-            type="email"
-            placeholder="hello@example.com"
-            onChange={(event) => setEmail(event.target.value)}
-            />
-            <button>Submit</button>
-          </form>
+    <BrowserRouter>
+      <div className="form_container">
+        <h2>Login Here</h2>
+        <div>{
+          loading ? "Logging In..."
+          : (
+          <div className="login_form_fields">
+            <form onSubmit={handleLogin}>
+              <label htmlFor="email">Email:</label>
+              <input
+              id="email"
+              className="inputField"
+              type="email"
+              onChange={(event) => setEmail(event.target.value)}
+              />
+              <br></br>
+              <label htmlFor="password">Password:</label>
+              <input
+              id="password"
+              className="inputField"
+              type="password"
+              onChange={(event) => setPassword(event.target.value)}
+              />
+              <br></br>
+              <button>Submit</button>
+            </form>
+          </div>
+          )}
         </div>
-        )}
-      </p>
-      <button onClick={}>Register New User</button>
-    </div>
+        <Link to="/register">Register new user</Link>
+      </div>
+      <button type="button" className="button block" onClick={() => supabaseClient.auth.signOut()}>
+        Sign Out
+      </button>
+    </BrowserRouter>
 )
 }
 

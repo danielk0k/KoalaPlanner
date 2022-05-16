@@ -1,5 +1,6 @@
 import { useState } from "react";
-import RegisterForm from "./RegisterForm";
+import { BrowserRouter, Link } from "react-router-dom";
+import LoginForm from "./LoginForm";
 
 function RegisterForm({ supabaseClient }) {
   const [loading, setLoading] = useState(false);
@@ -12,7 +13,7 @@ function RegisterForm({ supabaseClient }) {
 
     try {
       setLoading(true);
-      const { user, session, error } = await supabase.auth.signUp(
+      const { user, session, error } = await supabaseClient.auth.signUp(
         { email, password },
         { data: { username: name } }
       );
@@ -29,41 +30,49 @@ function RegisterForm({ supabaseClient }) {
   };
 
   return (
-    <div className="form_container">
-      <h2>Sign Up Here</h2>
-      <p>{
-        loading ? "Creating new user..."
-        : (
-        <div className="login_form_fields">
-          <form onSubmit={handleRegister}>
-            <label htmlFor="text">Username:</label>
-            <input
-            id="username"
-            className="inputField"
-            type="text"
-            onChange={(event) => setName(event.target.value)}
-            />
-            <label htmlFor="email">Email:</label>
-            <input
-            id="email"
-            className="inputField"
-            type="email"
-            onChange={(event) => setEmail(event.target.value)}
-            />
-            <label htmlFor="password">Password:</label>
-            <input
-            id="password"
-            className="inputField"
-            type="password"
-            onChange={(event) => setPassword(event.target.value)}
-            />
-            <button>Submit</button>
-          </form>
+    <BrowserRouter>
+      <div className="form_container">
+        <h2>Sign Up Here</h2>
+        <div>{
+          loading ? "Creating new user..."
+          : (
+          <div className="login_form_fields">
+            <form onSubmit={handleRegister}>
+              <label htmlFor="text">Username:</label>
+              <input
+              id="username"
+              className="inputField"
+              type="text"
+              onChange={(event) => setName(event.target.value)}
+              />
+              <br></br>
+              <label htmlFor="email">Email:</label>
+              <input
+              id="email"
+              className="inputField"
+              type="email"
+              onChange={(event) => setEmail(event.target.value)}
+              />
+              <br></br>
+              <label htmlFor="password">Password:</label>
+              <input
+              id="password"
+              className="inputField"
+              type="password"
+              onChange={(event) => setPassword(event.target.value)}
+              />
+              <br></br>
+              <button>Submit</button>
+            </form>
+          </div>
+          )}
         </div>
-        )}
-      </p>
-      <button onClick={}>Sign In Current User</button>
-    </div>
+        <Link to="/login">Sign in as current user</Link>
+      </div>
+      <button type="button" className="button block" onClick={() => supabaseClient.auth.signOut()}>
+        Sign Out
+      </button>
+    </BrowserRouter>
 )
 }
 
