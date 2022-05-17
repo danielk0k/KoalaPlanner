@@ -14,7 +14,7 @@ function RegisterForm() {
 
     try {
       setLoading(true);
-      const { user, signUpError } = await supabaseClient.auth.signUp({
+      const { user, error: signUpError } = await supabaseClient.auth.signUp({
         email,
         password,
       });
@@ -23,10 +23,12 @@ function RegisterForm() {
         throw signUpError;
       }
 
-      const { upsertError } = await supabaseClient.from("profiles").upsert(
-        { id: user.id, username: name, updated_at: new Date() },
-        { returning: "minimal" } // Don't return the value after inserting
-      );
+      const { error: upsertError } = await supabaseClient
+        .from("profiles")
+        .upsert(
+          { id: user.id, username: name, updated_at: new Date() },
+          { returning: "minimal" } // Don't return the value after inserting
+        );
 
       if (upsertError) {
         throw upsertError;
@@ -49,7 +51,7 @@ function RegisterForm() {
         {loading ? (
           "Creating new user..."
         ) : (
-          <div className="login_form_fields">
+          <div className="form_fields">
             <form onSubmit={handleRegister}>
               <label htmlFor="text">Username:</label>
               <input
@@ -81,6 +83,7 @@ function RegisterForm() {
         )}
       </div>
       <Link to="/login">Sign in as current user</Link>
+      <br></br>
       <button
         type="button"
         className="button block"

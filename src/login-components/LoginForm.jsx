@@ -13,15 +13,14 @@ function LoginForm() {
 
     try {
       setLoading(true);
-      const { signInError } = await supabaseClient.auth.signIn({
+      const { error } = await supabaseClient.auth.signIn({
         email,
         password,
       });
 
-      if (signInError) {
-        throw signInError;
+      if (error) {
+        throw error;
       }
-
       alert("Successfully logged in.");
       navigate("/home", { replace: true });
     } catch (error) {
@@ -39,7 +38,7 @@ function LoginForm() {
         {loading ? (
           "Logging In..."
         ) : (
-          <div className="login_form_fields">
+          <div className="form_fields">
             <form onSubmit={handleLogin}>
               <label htmlFor="email">Email:</label>
               <input
@@ -63,6 +62,7 @@ function LoginForm() {
         )}
       </div>
       <Link to="/register">Register new user</Link>
+      <br></br>
       <button
         type="button"
         className="button block"

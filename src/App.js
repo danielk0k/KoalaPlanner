@@ -1,22 +1,17 @@
-import { useState, useEffect } from "react";
+import { Navigate } from "react-router-dom";
 import supabaseClient from "./login-components/supabaseClient";
-import LoginForm from "./login-components/LoginForm";
-import Account from "./login-components/Account";
 
 function App() {
-  const [session, setSession] = useState(null);
+  // Returns the session data, if there is an active session.
+  const session = supabaseClient.auth.session();
 
-  useEffect(() => {
-    // Returns the session data, if there is an active session.
-    setSession(supabaseClient.auth.session());
-
-    // Listens to an auth event.
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      setSession(session);
-    });
-  }, []);
-
-  return <>{session ? <Account /> : <LoginForm />}</>;
+  return session ? (
+    // Already logged in.
+    <Navigate to="/home" replace={true} />
+  ) : (
+    // Not logged in.
+    <Navigate to="login" replace={true} />
+  );
 }
 
 export default App;

@@ -20,7 +20,7 @@ function Account() {
 
       let { data, error, status } = await supabaseClient
         .from("profiles")
-        .select(`username, website, avatar_url`)
+        .select(`username`)
         .eq("id", user.id)
         .single();
 
@@ -34,6 +34,8 @@ function Account() {
       }
     } catch (error) {
       alert(error.message);
+      supabaseClient.auth.signOut();
+      navigate("/login", { replace: true });
     } finally {
       setLoading(false);
     }
