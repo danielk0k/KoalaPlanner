@@ -1,0 +1,318 @@
+.background {
+    background-image: url(tree.png);
+    background-position: center; /* Center the image */
+    background-repeat: no-repeat; /* Do not repeat the image */
+    background-size: cover; /* Resize the background image to cover the entire container */
+}
+.center {
+    border-radius: 20px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 323px;
+    height: 219px;
+}   
+
+
+.welcome-text {
+	  display: block;
+    text-align: center;
+	  padding: 30px;
+	  width: 300px;
+    height: 70px;
+	  background: rgb(61, 233, 127);
+	  border-radius: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    /*font-style: italic;*/
+    font-size: x-large;
+    margin-left: auto;
+    margin-right: auto;
+
+}
+
+/*.welcome-button {
+    display: auto;
+    height: 100px;
+    width: 200px;
+    background-color: greenyellow;
+    text-align: center;
+    font-size: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}*/
+
+.btn {
+    margin: 0 auto;
+    width: 200px;
+    height: 50px;
+    padding: 6px 0 0 3px;
+    border: 2px solid none;
+    border-radius: 20px;
+    background: white;
+    font-size: 16px;
+    line-height: 54px;
+    color: #fff;
+    letter-spacing: .25em;
+    text-decoration: none;
+    font-weight: 600;
+    text-transform: uppercase;
+    vertical-align: middle;
+    text-align: center;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    -webkit-transition: background .4s, color .4s;
+    transition: background .4s, color .4s;
+    cursor: pointer;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .btn:hover {
+    background: greenyellow;
+    color: #10151B;
+  }
+
+.paw-icon {
+    width: 500px;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .circle {
+    position: relative;
+    /*円の横幅*/
+    width: 120px;
+    /**円の縦幅*/
+    height: 120px;
+    /**角のまるさ*/
+    border-radius: 50%;
+    background: white; /*背景色*/
+    /**テキストを中心に*/
+    text-align: center;
+    /*文字の高さ:hightとあわせる*/
+    line-height: 120px;
+    /**塗りつぶしじゃなくて線にする*/
+    border: solid 3px darkgray;
+    margin-left: auto;
+    margin-right: auto;
+    /**アニメーション*/
+    animation: Flash 2s infinite;
+  }
+  
+  .paw {
+    position: relative;
+    margin: 0 auto;
+    width: 500px;
+    height: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  .paw:hover {
+    animation: kaiten 1.5s linear 1;
+  }
+  .paw-center {
+    position: absolute;
+    z-index: 999;
+    width: 30%;
+    height: 50%;
+    border-radius: 50px;
+    background: #ccc;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+  }
+  .paw-bottom {
+    z-index: 998;
+    position: absolute;
+    width: 65%;
+    height: 35%;
+    border-radius: 70px;
+    background: #ccc;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 10%;
+  }
+  .nikukyu1,
+  .nikukyu2,
+  .nikukyu3,
+  .nikukyu4 {
+    z-index: 1000;
+    /*円の横幅*/
+    width: 20px;
+    /**円の縦幅*/
+    height: 25px;
+    /**角のまるさ*/
+    border-radius: 50%;
+    background: #ccc; /*背景色*/
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .nikukyu1 {
+    position: absolute;
+    transform: rotate(-35deg);
+    top: 30%;
+    left: 8%;
+  }
+  .nikukyu2 {
+    transform: rotate(-10deg);
+    position: absolute;
+    top: 12%;
+    left: 28%;
+  }
+  .nikukyu3 {
+    transform: rotate(10deg);
+    position: absolute;
+    top: 12%;
+    right: 28%;
+  }
+  .nikukyu4 {
+    transform: rotate(35deg);
+    position: absolute;
+    top: 30%;
+    right: 8%;
+  }
+  /* アニメーション */
+  @keyframes Flash {
+    50% {
+      box-shadow: 0px 0px 10px 0px rgb(103, 189, 223);
+    }
+  }
+  
+  @keyframes kaiten {
+    0% {
+      transform: rotateY(0deg);
+    }
+    100% {
+      transform: rotateY(180deg);
+    }
+  }
+
+.pad {
+    width: 25px;
+    height: 27px;
+    background-color: #654321;
+    -webkit-border-radius: 63px 63px 63px 63px / 108px     108px 72px 72px;
+    border-radius: 50%  50%  50%  50%  / 60%   60%         40%  40%;
+    display: block;
+    position: absolute;
+}       
+.large {
+   width: 70px;
+   height: 80px;
+   transform: rotate(80deg);
+   left: 100px;
+   top: 50px;
+} 
+.small-1 {
+   transform: rotate(50deg);
+   left: 145px;
+   top: 28px;
+}
+.small-2 {
+   transform: rotate(65deg);
+   left: 174px;
+   top: 50px;
+}  
+.small-3 {
+   transform: rotate(98deg);
+   position: absolute;
+   left: 178px;
+   top: 87px;
+}
+.small-4 {
+   transform: rotate(140deg);
+   position: absolute;
+   left: 158px;
+   top: 117px;
+}
+    
+/* position and animate */
+    
+.paw-print-1 {
+  opacity: 0;
+  position: absolute;
+  left: 75px;
+  top: 750px;
+  transform: rotate(-40deg);
+  -webkit-animation: walk 3s linear infinite;
+  animation: /*keyframe*/walk /*duration*/3s /*transition*/linear /*repeat*/infinite;
+}
+.paw-print-2 {
+  opacity: 0;
+  position: absolute;
+  left: 275px;
+  top: 580px;
+  transform: rotate(-5deg); 
+  -webkit-animation: walk 3s linear infinite 0.25s;
+  animation: walk 3s linear infinite /*delay*/0.25s;
+}
+.paw-print-3 {
+  opacity: 0;
+  position: absolute;
+  left: 375px;
+  top: 680px;
+  transform: rotate(-10deg); 
+  -webkit-animation: walk 3s linear infinite 0.5s;
+  animation: walk 3s linear infinite 0.5s;
+}     
+.paw-print-4 {
+  opacity: 0;
+  position: absolute;
+  left: 575px;
+  top: 620px;
+  transform: rotate(-20deg); 
+  -webkit-animation: walk 3s linear infinite 0.75s;
+  animation: walk 3s linear infinite 0.75s;
+}    
+.paw-print-5 {
+  opacity: 0;
+  position: absolute;
+  left: 725px;
+  top: 600px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1s;
+  animation: walk 3s linear infinite 1s;
+}   
+.paw-print-6 {
+  opacity: 0;
+  position: absolute;
+  left: 875px;
+  top: 500px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1.25s;
+  animation: walk 3s linear infinite 1.25s;
+}   
+.paw-print-7 {
+  opacity: 0;
+  position: absolute;
+  left: 1075px;
+  top: 600px;
+  transform: rotate(20deg); 
+  -webkit-animation: walk 3s linear infinite 1.5s;
+  animation: walk 3s linear infinite 1.5s;
+}   
+.paw-print-8 {
+  opacity: 0;
+  position: absolute;
+  left: 1150px;
+  top: 500px;
+  transform: rotate(10deg); 
+  -webkit-animation: walk 3s linear infinite 1.75s;
+  animation: walk 3s linear infinite 1.75s;
+}
+    
+/* walking effect animation keyframes */
+    
+@-webkit-keyframes walk {
+  25%  {opacity: 1;}
+  100% {opacity: 0;}
+}
+    
+@keyframes walk {
+  /* appear */
+  25%  {opacity: 1;}
+  /* disappear */
+  100% {opacity: 0;}
+}
