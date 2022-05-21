@@ -1,24 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { Navigate } from "react-router-dom";
+import supabaseClient from "./login-components/supabaseClient";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+  // Returns the session data, if there is an active session.
+  const session = supabaseClient.auth.session();
+
+  return session ? (
+    // Already logged in.
+    <Navigate to="/home" replace={true} />
+  ) : (
+    // Not logged in.
+    <Navigate to="login" replace={true} />
   );
 }
 
