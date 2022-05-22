@@ -35,7 +35,7 @@ function RegisterForm() {
       }
 
       alert("Successfully created new user.");
-      navigate("/home", { replace: true });
+      navigate("/app/profile", { replace: true });
     } catch (error) {
       alert("Error in creating new user.");
       console.log(error.error_description || error.message);
@@ -82,14 +82,14 @@ function RegisterForm() {
           </div>
         )}
       </div>
-      <Link to="/login">Sign in as current user</Link>
+      <Link to="/app/login">Sign in as current user</Link>
       <br></br>
       <button
         type="button"
         className="button block"
         onClick={() => {
           supabaseClient.auth.signOut();
-          navigate("/", { replace: true });
+          navigate("/app", { replace: true });
         }}
       >
         Sign Out

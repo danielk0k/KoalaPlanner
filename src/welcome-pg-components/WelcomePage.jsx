@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import styles from "./welcome.css";
 
 function WelcomePage() {
@@ -13,7 +14,7 @@ function WelcomePage() {
         </div>
 
         <div class="btn">
-          <a href="index.html">Click to login</a>
+          <Link to="/app">Click to login</Link>
         </div>
       </div>
 

@@ -1,8 +1,8 @@
-import supabaseClient from "./supabaseClient";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import supabaseClient from "../auth-components/supabaseClient";
 
-function Account() {
+function Profile() {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [newUsername, setNewUsername] = useState("");
@@ -21,7 +21,6 @@ function Account() {
       let { data, error, status } = await supabaseClient
         .from("profiles")
         .select(`username`)
-        .eq("id", user.id)
         .single();
 
       if (error && status !== 406) {
@@ -35,7 +34,7 @@ function Account() {
     } catch (error) {
       alert(error.message);
       supabaseClient.auth.signOut();
-      navigate("/login", { replace: true });
+      navigate("/app", { replace: true });
     } finally {
       setLoading(false);
     }
@@ -74,6 +73,9 @@ function Account() {
   return (
     <div>
       <h3>Welcome back {username}</h3>
+      <Link to="/app/profile">Profile | </Link>
+      <Link to="/app/board">Board | </Link>
+      <Link to="/app/settings">Settings</Link>
       <div>
         {loading ? (
           "Updating profile..."
@@ -95,7 +97,7 @@ function Account() {
         className="button block"
         onClick={() => {
           supabaseClient.auth.signOut();
-          navigate("/", { replace: true });
+          navigate("/app", { replace: true });
         }}
       >
         Sign Out
@@ -104,4 +106,4 @@ function Account() {
   );
 }
 
-export default Account;
+export default Profile;

@@ -1,6 +1,12 @@
+import { Link } from "react-router-dom";
+import styles from "./main.css";
+
 function KanbanBoard() {
   return (
-    <body>
+    <body className={{ styles }}>
+      <Link to="/app/profile">Profile | </Link>
+      <Link to="/app/board">Board | </Link>
+      <Link to="/app/settings">Settings</Link>
       <div class="kanban">
         <div class="kanban__column">
           <div class="kanban__column-title">Not Started</div>

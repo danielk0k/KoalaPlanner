@@ -22,7 +22,7 @@ function LoginForm() {
         throw error;
       }
       alert("Successfully logged in.");
-      navigate("/home", { replace: true });
+      navigate("/app/profile", { replace: true });
     } catch (error) {
       alert("Error in logging in.");
       console.log(error.error_description || error.message);
@@ -61,14 +61,14 @@ function LoginForm() {
           </div>
         )}
       </div>
-      <Link to="/register">Register new user</Link>
+      <Link to="/app/signup">Register new user</Link>
       <br></br>
       <button
         type="button"
         className="button block"
         onClick={() => {
           supabaseClient.auth.signOut();
-          navigate("/", { replace: true });
+          navigate("/app", { replace: true });
         }}
       >
         Sign Out

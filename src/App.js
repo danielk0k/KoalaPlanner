@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import supabaseClient from "./login-components/supabaseClient";
+import supabaseClient from "./auth-components/supabaseClient";
 
 function App() {
   // Returns the session data, if there is an active session.
@@ -7,10 +7,10 @@ function App() {
 
   return session ? (
     // Already logged in.
-    <Navigate to="/home" replace={true} />
+    <Navigate to="/app/profile" replace={true} />
   ) : (
     // Not logged in.
-    <Navigate to="login" replace={true} />
+    <Navigate to="/app/login" replace={true} />
   );
 }
 
