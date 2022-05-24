@@ -4,6 +4,7 @@ import styles from "./main.css";
 function KanbanBoard() {
   return (
     <body className={{ styles }}>
+      <h1>Board</h1>
       <Link to="/app/profile">Profile | </Link>
       <Link to="/app/board">Board | </Link>
       <Link to="/app/settings">Settings</Link>
