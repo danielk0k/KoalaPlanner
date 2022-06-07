@@ -1,6 +1,18 @@
 import supabaseClient from "./supabaseClient";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {
+  Box,
+  Center,
+  Square,
+  Heading,
+  Text,
+  Flex,
+  Input,
+  Button,
+  FormControl,
+  FormLabel,
+} from "@chakra-ui/react";
 
 function RegisterForm() {
   const [loading, setLoading] = useState(false);
@@ -45,56 +57,76 @@ function RegisterForm() {
   };
 
   return (
-    <div className="form_container">
-      <h2>Sign Up Here</h2>
-      <div>
-        {loading ? (
-          "Creating new user..."
-        ) : (
-          <div className="form_fields">
-            <form onSubmit={handleRegister}>
-              <label htmlFor="text">Username:</label>
-              <input
-                id="username"
-                className="inputField"
-                type="text"
-                onChange={(event) => setName(event.target.value)}
-              />
-              <br></br>
-              <label htmlFor="email">Email:</label>
-              <input
-                id="email"
-                className="inputField"
-                type="email"
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <br></br>
-              <label htmlFor="password">Password:</label>
-              <input
-                id="password"
-                className="inputField"
-                type="password"
-                onChange={(event) => setPassword(event.target.value)}
-              />
-              <br></br>
-              <button>Submit</button>
-            </form>
-          </div>
-        )}
-      </div>
-      <Link to="/app/login">Sign in as current user</Link>
-      <br></br>
-      <button
-        type="button"
-        className="button block"
-        onClick={() => {
-          supabaseClient.auth.signOut();
-          navigate("/app", { replace: true });
-        }}
+    <Flex align="center" justifyContent="center">
+      <Box
+        textAlign="center"
+        boxShadow="lg"
+        borderRadius="10px"
+        borderWidth="1px"
+        marginTop="100px"
+        padding="30px"
+        bgColor="#FFFFFF"
+        width="25%"
       >
-        Sign Out
-      </button>
-    </div>
+        <Heading margin="10px">Welcome</Heading>
+        <Center>
+          <Square size="60px" bg="#2C3E50" borderRadius="10px" margin="10px">
+            <Heading textColor="#FFFFFF">K</Heading>
+          </Square>
+        </Center>
+        <form onSubmit={handleRegister}>
+          <FormControl marginTop="50px">
+            <FormLabel htmlFor="text"></FormLabel>
+            <Input
+              id="username"
+              type="text"
+              placeholder="Username"
+              onChange={(event) => setName(event.target.value)}
+              padding="10px"
+            />
+            <FormLabel htmlFor="email"></FormLabel>
+            <Input
+              id="email"
+              type="email"
+              placeholder="Email"
+              onChange={(event) => setEmail(event.target.value)}
+              padding="10px"
+              marginTop="20px"
+            />
+            <FormLabel htmlFor="password"></FormLabel>
+            <Input
+              id="password"
+              type="password"
+              placeholder="Password"
+              onChange={(event) => setPassword(event.target.value)}
+              padding="10px"
+              marginTop="20px"
+            />
+            <Button
+              type="submit"
+              isLoading={loading}
+              loadingText="REGISTERING"
+              width="50%"
+              marginTop="40px"
+              textColor="#FFFFFF"
+              bgColor="#34495E"
+              borderWidth="1px"
+              _hover={{
+                backgroundColor: "#FFFFFF",
+                textColor: "#34495E",
+                borderColor: "#34495E",
+                borderWidth: "1px",
+              }}
+            >
+              <Text>REGISTER</Text>
+            </Button>
+          </FormControl>
+        </form>
+        <Text marginTop="40px">
+          Already have an account? <Link to="/app/login">Login here</Link>
+        </Text>
+      </Box>
+    </Flex>
   );
 }
 
