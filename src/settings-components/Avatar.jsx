@@ -1,30 +1,48 @@
 import { useEffect, useState } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
 
-export default function Avatar({ url, size, onUpload }) {
+export default function Avatar({ size }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
+  const user = supabaseClient.auth.user();
+  const session = supabaseClient.auth.session();
 
   useEffect(() => {
-    if (url) downloadImage(url);
-  }, [url]);
+    getAvatarImage();
+  }, [session]);
 
-  const downloadImage = async (path) => {
+  const getAvatarImage = async () => {
     try {
-      const { data, error } = await supabaseClient.storage
-        .from("avatars")
-        .download(path);
-      if (error) {
+      let {
+        data: userData,
+        error,
+        status,
+      } = await supabaseClient.from("profiles").select(`avatar_url`).single();
+
+      if (error && status !== 406) {
         throw error;
       }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
+
+      if (userData.avatar_url) {
+        const { data, error } = await supabaseClient.storage
+          .from("avatars")
+          .download(userData.avatar_url);
+
+        if (error) {
+          throw error;
+        }
+
+        setAvatarUrl(URL.createObjectURL(data));
+        setAvatarFilePath(userData.avatar_url);
+      }
     } catch (error) {
-      console.log("Error downloading image: ", error.message);
+      alert("Error in getting profile picture.");
+      console.log(error.message);
     }
   };
 
-  const uploadAvatar = async (event) => {
+  const uploadAvatarImage = async (event) => {
     try {
       setUploading(true);
 
@@ -32,33 +50,55 @@ export default function Avatar({ url, size, onUpload }) {
         throw new Error("You must select an image to upload.");
       }
 
+      if (avatarFilePath) {
+        const { error } = await supabaseClient.storage
+          .from("avatars")
+          .remove([avatarFilePath]);
+
+        if (error) {
+          throw error;
+        }
+      }
+
       const file = event.target.files[0];
       const fileExt = file.name.split(".").pop();
       const fileName = `${Math.random()}.${fileExt}`;
       const filePath = `${fileName}`;
 
-      let { error: uploadError } = await supabaseClient.storage
+      let { error } = await supabaseClient.storage
         .from("avatars")
         .upload(filePath, file);
 
-      if (uploadError) {
-        throw uploadError;
+      if (error) {
+        throw error;
       }
 
-      onUpload(filePath);
+      const updates = {
+        id: user.id,
+        avatar_url: filePath,
+        updated_at: new Date(),
+      };
+
+      const { error: upsertError } = await supabaseClient
+        .from("profiles")
+        .upsert(updates, { returning: "minimal" });
+
+      if (upsertError) {
+        throw upsertError;
+      }
     } catch (error) {
-      alert(error.message);
+      alert("Error in updating profile picture.");
+      console.log(error.message);
     } finally {
       setUploading(false);
     }
   };
 
   return (
-    <div style={{ width: size }} aria-live="polite">
+    <div style={{ width: size }}>
       <img
         src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
         alt={avatarUrl ? "Avatar" : "No image"}
-        className="avatar image"
         style={{ height: size, width: size }}
       />
       {uploading ? (
@@ -72,7 +112,7 @@ export default function Avatar({ url, size, onUpload }) {
             type="file"
             id="single"
             accept="image/*"
-            onChange={uploadAvatar}
+            onChange={uploadAvatarImage}
             disabled={uploading}
           />
         </>
