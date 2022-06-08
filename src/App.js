@@ -1,7 +1,11 @@
 import { Navigate } from "react-router-dom";
 import supabaseClient from "./auth-components/supabaseClient";
 
-function App() {
+function App({ signout }) {
+  if (signout) {
+    supabaseClient.auth.signOut();
+  }
+
   // Returns the session data, if there is an active session.
   const session = supabaseClient.auth.session();
 
