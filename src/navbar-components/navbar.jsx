@@ -26,7 +26,7 @@ const LinkItems = [
   { name: "Logout", icon: <ArrowForwardIcon />, url: "/app/signout" },
 ];
 
-export default function SimpleSidebar({ children }) {
+export default function Navbar({ children }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -50,7 +50,7 @@ export default function SimpleSidebar({ children }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} display={{ base: "flex", md: "none" }} />
-      <Box ml={{ base: 0, md: 60 }} p="4">
+      <Box ml={{ base: 0, md: 60 }} p={3} pl={10}>
         {children}
       </Box>
     </Box>

@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
-import SimpleSidebar from "../navbar-components/navbar";
+import Navbar from "../navbar-components/navbar";
+import { Heading, Text, Flex, Stack, Box } from "@chakra-ui/react";
 
 function Profile() {
   const [username, setUsername] = useState("");
@@ -34,21 +35,25 @@ function Profile() {
   };
 
   return (
-    <SimpleSidebar>
-      <h1>Profile</h1>
-      <h3>View your achievements and statistics</h3>
-      <h3>Welcome back {username}</h3>
-      <button
-        type="button"
-        className="button block"
-        onClick={() => {
-          supabaseClient.auth.signOut();
-          navigate("/app", { replace: true });
-        }}
-      >
-        Sign Out
-      </button>
-    </SimpleSidebar>
+    <Navbar>
+      <Flex>
+        <Stack spacing={8}>
+          <Heading size="2xl">Profile</Heading>
+          <Box
+            rounded={"lg"}
+            backgroundColor="#FFFFFF"
+            boxShadow={"lg"}
+            borderWidth={1}
+            p={8}
+          >
+            <Stack spacing={8}>
+              <Heading size="md">View your achievements and statistics</Heading>
+              <Heading>Welcome back {username}</Heading>
+            </Stack>
+          </Box>
+        </Stack>
+      </Flex>
+    </Navbar>
   );
 }
 

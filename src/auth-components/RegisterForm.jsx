@@ -70,7 +70,13 @@ function RegisterForm() {
             to enjoy all of our cool features
           </Text>
         </Stack>
-        <Box rounded={"lg"} boxShadow={"lg"} borderWidth={1} p={8}>
+        <Box
+          rounded={"lg"}
+          backgroundColor="#FFFFFF"
+          boxShadow={"lg"}
+          borderWidth={1}
+          p={8}
+        >
           <form onSubmit={handleRegister}>
             <Stack spacing={10}>
               <Stack spacing={4}>

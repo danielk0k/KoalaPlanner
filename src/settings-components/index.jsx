@@ -1,22 +1,43 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Avatar from "./Avatar";
+import ProfilePicture from "./Avatar";
 import Username from "./Username";
 import Credential from "./Credential";
-import SimpleSidebar from "../navbar-components/navbar";
+import Navbar from "../navbar-components/navbar";
+import { Heading, Text, Stack, Flex, Divider, Box } from "@chakra-ui/react";
 
 function Settings() {
   return (
-    <SimpleSidebar>
-      <h1>Settings</h1>
-      <h3>Update your account information</h3>
-      <Link to="/app/profile">Profile | </Link>
-      <Link to="/app/board">Board | </Link>
-      <Link to="/app/settings">Settings</Link>
-      <Avatar size={150} />
-      <Username />
-      <Credential />
-    </SimpleSidebar>
+    <Navbar>
+      <Flex>
+        <Stack spacing={8}>
+          <Heading size="2xl">Settings</Heading>
+          <Box
+            rounded={"lg"}
+            backgroundColor="#FFFFFF"
+            boxShadow={"lg"}
+            borderWidth={1}
+            p={8}
+          >
+            <Stack spacing={8}>
+              <Heading size="md">Update your account information</Heading>
+              <ProfilePicture />
+              <Username />
+              <Divider />
+              <Credential />
+            </Stack>
+          </Box>
+          <Box
+            rounded={"lg"}
+            backgroundColor="#FFFFFF"
+            boxShadow={"lg"}
+            borderWidth={1}
+            p={8}
+          >
+            <Text>A NUS Orbital Project Summer AY21/22</Text>
+          </Box>
+        </Stack>
+      </Flex>
+    </Navbar>
   );
 }
 

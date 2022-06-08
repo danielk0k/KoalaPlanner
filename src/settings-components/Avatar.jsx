@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
+import { Avatar, Text, HStack, Stack } from "@chakra-ui/react";
 
-export default function Avatar({ size }) {
+export default function ProfilePicture() {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
@@ -91,32 +92,23 @@ export default function Avatar({ size }) {
       console.log(error.message);
     } finally {
       setUploading(false);
+      window.location.reload();
     }
   };
 
   return (
-    <div style={{ width: size }}>
-      <img
-        src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
-        alt={avatarUrl ? "Avatar" : "No image"}
-        style={{ height: size, width: size }}
-      />
-      {uploading ? (
-        "Uploading..."
-      ) : (
-        <>
-          <label className="button primary block" htmlFor="single">
-            Upload an avatar
-          </label>
-          <input
-            type="file"
-            id="single"
-            accept="image/*"
-            onChange={uploadAvatarImage}
-            disabled={uploading}
-          />
-        </>
-      )}
-    </div>
+    <HStack spacing={8}>
+      <Avatar size="2xl" src={avatarUrl} />
+      <Stack>
+        <Text>Upload an avatar</Text>
+        <input
+          type="file"
+          id="single"
+          accept="image/*"
+          onChange={uploadAvatarImage}
+          disabled={uploading}
+        />
+      </Stack>
+    </HStack>
   );
 }
