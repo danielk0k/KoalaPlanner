@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import Avatar from "./Avatar";
 import Username from "./Username";
 import Credential from "./Credential";
+import SimpleSidebar from "../navbar-components/navbar";
 
 function Settings() {
   return (
-    <div>
+    <SimpleSidebar>
       <h1>Settings</h1>
       <h3>Update your account information</h3>
       <Link to="/app/profile">Profile | </Link>
@@ -15,7 +16,7 @@ function Settings() {
       <Avatar size={150} />
       <Username />
       <Credential />
-    </div>
+    </SimpleSidebar>
   );
 }
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
+import SimpleSidebar from "../navbar-components/navbar";
 
 function Profile() {
   const [username, setUsername] = useState("");
@@ -33,15 +34,10 @@ function Profile() {
   };
 
   return (
-    <div>
+    <SimpleSidebar>
       <h1>Profile</h1>
       <h3>View your achievements and statistics</h3>
       <h3>Welcome back {username}</h3>
-      <Link to="/app/profile">Profile | </Link>
-      <Link to="/app/board">Board | </Link>
-      <Link to="/app/settings">Settings</Link>
-
-      <br></br>
       <button
         type="button"
         className="button block"
@@ -52,7 +48,7 @@ function Profile() {
       >
         Sign Out
       </button>
-    </div>
+    </SimpleSidebar>
   );
 }
 
