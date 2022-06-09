@@ -71,6 +71,7 @@ function LoginForm() {
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input
                     type="email"
+                    required
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
@@ -78,6 +79,7 @@ function LoginForm() {
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <Input
                     type="password"
+                    required
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>

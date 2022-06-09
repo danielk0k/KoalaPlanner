@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
-import Navbar from "../navbar-components/navbar";
-import { Heading, Text, Flex, Stack, Box } from "@chakra-ui/react";
+import Navbar from "../ui-components/Navbar";
+import { Heading, Flex, Stack, Box } from "@chakra-ui/react";
 
 function Profile() {
   const [username, setUsername] = useState("");

@@ -7,11 +7,10 @@ export default function ProfilePicture() {
   const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
   const user = supabaseClient.auth.user();
-  const session = supabaseClient.auth.session();
 
   useEffect(() => {
     getAvatarImage();
-  }, [session]);
+  }, [avatarFilePath]);
 
   const getAvatarImage = async () => {
     try {
@@ -87,12 +86,12 @@ export default function ProfilePicture() {
       if (upsertError) {
         throw upsertError;
       }
+      setAvatarFilePath(filePath);
     } catch (error) {
       alert("Error in updating profile picture.");
       console.log(error.message);
     } finally {
       setUploading(false);
-      window.location.reload();
     }
   };
 

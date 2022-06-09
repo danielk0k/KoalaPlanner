@@ -7,7 +7,7 @@ import App from "./App";
 import RegisterForm from "./auth-components/RegisterForm";
 import LoginForm from "./auth-components/LoginForm";
 import Profile from "./profile-components/Profile";
-import KanbanBoard from "./kanban-components/KanbanBoard";
+import Board from "./kanban-components/index";
 import Settings from "./settings-components/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
@@ -21,7 +21,7 @@ root.render(
           <Route path="/app/signup" element={<RegisterForm />}></Route>
           <Route path="/app/login" element={<LoginForm />}></Route>
           <Route path="/app/profile" element={<Profile />}></Route>
-          <Route path="/app/board" element={<KanbanBoard />}></Route>
+          <Route path="/app/board" element={<Board />}></Route>
           <Route path="/app/settings" element={<Settings />}></Route>
           <Route path="/app/signout" element={<App signout={true} />}></Route>
         </Routes>

@@ -85,6 +85,7 @@ function RegisterForm() {
                   <Input
                     id="username"
                     type="text"
+                    required
                     onChange={(event) => setName(event.target.value)}
                   />
                 </FormControl>
@@ -93,6 +94,7 @@ function RegisterForm() {
                   <Input
                     id="email"
                     type="email"
+                    required
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
@@ -101,6 +103,8 @@ function RegisterForm() {
                   <Input
                     id="password"
                     type="password"
+                    minlength="6"
+                    required
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>

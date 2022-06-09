@@ -97,7 +97,7 @@ const NavItem = ({ item }) => {
       >
         <HStack spacing={4}>
           {item.icon}
-          <Text>{item.name}</Text>
+          <Text fontWeight="bold">{item.name}</Text>
         </HStack>
       </Flex>
     </Link>

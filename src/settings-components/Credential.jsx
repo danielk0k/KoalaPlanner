@@ -21,10 +21,17 @@ function Credential() {
     try {
       setLoading(true);
 
-      const { user, error } = await supabaseClient.auth.update({
-        email: email,
-        password: password,
-      });
+      var updatePayload;
+
+      if (password.length === 0) {
+        updatePayload = { email: email };
+      } else if (email.length === 0) {
+        updatePayload = { password: password };
+      } else {
+        updatePayload = { email: email, password: password };
+      }
+
+      const { error } = await supabaseClient.auth.update(updatePayload);
 
       if (error) {
         throw error;
@@ -55,6 +62,7 @@ function Credential() {
             id="password"
             type="password"
             placeholder="Enter new password"
+            minlength="6"
             onChange={(event) => setPassword(event.target.value)}
           />
         </FormControl>

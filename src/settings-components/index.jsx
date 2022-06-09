@@ -2,7 +2,7 @@ import React from "react";
 import ProfilePicture from "./Avatar";
 import Username from "./Username";
 import Credential from "./Credential";
-import Navbar from "../navbar-components/navbar";
+import Navbar from "../ui-components/Navbar";
 import { Heading, Text, Stack, Flex, Divider, Box } from "@chakra-ui/react";
 
 function Settings() {
