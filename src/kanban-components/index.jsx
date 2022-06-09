@@ -1,11 +1,13 @@
 import React from "react";
 import Navbar from "../ui-components/Navbar";
-import KanbanBoard from "./KanbanBoard";
+import KanbanAPI from "./KanbanAPI.js";
+import { Heading } from "@chakra-ui/react";
 
 function index() {
+  KanbanAPI.deleteTask(86975);
   return (
     <Navbar>
-      <KanbanBoard />
+      <Heading>Board</Heading>
     </Navbar>
   );
 }

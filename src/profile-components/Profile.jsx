@@ -17,7 +17,7 @@ function Profile() {
     try {
       let { data, error, status } = await supabaseClient
         .from("profiles")
-        .select(`username`)
+        .select("username")
         .single();
 
       if (error && status !== 406) {
