@@ -62,7 +62,7 @@ function Credential() {
             id="password"
             type="password"
             placeholder="Enter new password"
-            minlength="6"
+            minLength="6"
             onChange={(event) => setPassword(event.target.value)}
           />
         </FormControl>

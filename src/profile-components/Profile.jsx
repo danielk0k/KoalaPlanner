@@ -36,23 +36,24 @@ function Profile() {
 
   return (
     <Navbar>
-      <Flex>
-        <Stack spacing={8}>
-          <Heading size="2xl">Profile</Heading>
+      <Stack spacing={8}>
+        <Heading size="2xl">Profile</Heading>
+        <Flex>
           <Box
             rounded={"lg"}
             backgroundColor="#FFFFFF"
             boxShadow={"lg"}
             borderWidth={1}
-            p={8}
+            padding={8}
+            width="100%"
           >
             <Stack spacing={8}>
               <Heading size="md">View your achievements and statistics</Heading>
               <Heading>Welcome back {username}</Heading>
             </Stack>
           </Box>
-        </Stack>
-      </Flex>
+        </Flex>
+      </Stack>
     </Navbar>
   );
 }

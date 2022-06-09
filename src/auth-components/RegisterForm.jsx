@@ -103,7 +103,7 @@ function RegisterForm() {
                   <Input
                     id="password"
                     type="password"
-                    minlength="6"
+                    minLength="6"
                     required
                     onChange={(event) => setPassword(event.target.value)}
                   />
