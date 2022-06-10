@@ -13,19 +13,17 @@ import Settings from "./settings-components/index";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ChakraProvider>
-    <React.StrictMode>
-      <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<WelcomePage />}></Route>
-          <Route path="/app" element={<App signout={false} />}></Route>
-          <Route path="/app/signup" element={<RegisterForm />}></Route>
-          <Route path="/app/login" element={<LoginForm />}></Route>
-          <Route path="/app/profile" element={<Profile />}></Route>
-          <Route path="/app/board" element={<Board />}></Route>
-          <Route path="/app/settings" element={<Settings />}></Route>
-          <Route path="/app/signout" element={<App signout={true} />}></Route>
-        </Routes>
-      </BrowserRouter>
-    </React.StrictMode>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<WelcomePage />}></Route>
+        <Route path="/app" element={<App signout={false} />}></Route>
+        <Route path="/app/signup" element={<RegisterForm />}></Route>
+        <Route path="/app/login" element={<LoginForm />}></Route>
+        <Route path="/app/profile" element={<Profile />}></Route>
+        <Route path="/app/board" element={<Board />}></Route>
+        <Route path="/app/settings" element={<Settings />}></Route>
+        <Route path="/app/signout" element={<App signout={true} />}></Route>
+      </Routes>
+    </BrowserRouter>
   </ChakraProvider>
 );

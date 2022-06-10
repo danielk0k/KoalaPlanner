@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
-import TaskList from "./TaskList";
+import Column from "./Column";
 import NewTaskForm from "./NewTaskForm";
+import { DragDropContext } from "react-beautiful-dnd";
 import {
   Heading,
   Flex,
-  Box,
   Spacer,
   Stack,
   Button,
@@ -81,6 +81,10 @@ function Board() {
     }
   };
 
+  const handleOnDragEnd = (result) => {
+    // TODO
+  };
+
   return (
     <>
       <NewTaskForm
@@ -97,58 +101,33 @@ function Board() {
           <Spacer />
           <Button onClick={onOpen}>Create New Task</Button>
         </Flex>
-        <Flex>
-          <Stack spacing={4} width="30%">
-            <Box
-              rounded={"lg"}
-              backgroundColor="#FFFFFF"
-              boxShadow={"lg"}
-              borderWidth={1}
-              padding={4}
-            >
-              <Heading size="md">To Do</Heading>
-            </Box>
-            {data === null ? (
-              <Skeleton height="20px" />
-            ) : (
-              <TaskList data={data} columnId="to_do" />
-            )}
-          </Stack>
-          <Spacer width="20%" />
-          <Stack spacing={4} width="30%">
-            <Box
-              rounded={"lg"}
-              backgroundColor="#FFFFFF"
-              boxShadow={"lg"}
-              borderWidth={1}
-              padding={4}
-            >
-              <Heading size="md">In Progress</Heading>
-            </Box>
-            {data === null ? (
-              <Skeleton height="20px" />
-            ) : (
-              <TaskList data={data} columnId="in_progress" />
-            )}
-          </Stack>
-          <Spacer width="20%" />
-          <Stack spacing={4} width="30%">
-            <Box
-              rounded={"lg"}
-              backgroundColor="#FFFFFF"
-              boxShadow={"lg"}
-              borderWidth={1}
-              padding={4}
-            >
-              <Heading size="md">Completed</Heading>
-            </Box>
-            {data === null ? (
-              <Skeleton height="20px" />
-            ) : (
-              <TaskList data={data} columnId="completed" />
-            )}
-          </Stack>
-        </Flex>
+        {data === null ? (
+          <Skeleton height="50px" />
+        ) : (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Flex>
+              <Stack spacing={4} width="30%">
+                <Column data={data} columnId="to_do" columnName="To Do" />
+              </Stack>
+              <Spacer width="20%" />
+              <Stack spacing={4} width="30%">
+                <Column
+                  data={data}
+                  columnId="in_progress"
+                  columnName="In Progress"
+                />
+              </Stack>
+              <Spacer width="20%" />
+              <Stack spacing={4} width="30%">
+                <Column
+                  data={data}
+                  columnId="completed"
+                  columnName="Completed"
+                />
+              </Stack>
+            </Flex>
+          </DragDropContext>
+        )}
       </Stack>
     </>
   );
