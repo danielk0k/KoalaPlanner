@@ -22,6 +22,7 @@ function TaskCard({ task, index }) {
             <Stack spacing={4}>
               <Heading size="md">{task.content.title}</Heading>
               <Text>{task.content.description}</Text>
+              <Text>Due by {task.content.date}</Text>
             </Stack>
           </Box>
         </div>

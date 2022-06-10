@@ -19,12 +19,14 @@ function NewTaskForm({ isOpen, onOpen, onClose, data, setData, saveData }) {
   const [selectValue, setSelectValue] = useState("");
   const [titleValue, setTitleValue] = useState("");
   const [descriptionVal, setDescriptionVal] = useState("");
+  const [dateValue, setDateValue] = useState(new Date());
 
   const handleNewTask = () => {
     saveData(
       KanbanAPI.insertTask(data, setData, selectValue, {
         title: titleValue,
         description: descriptionVal,
+        date: dateValue,
       })
     );
     onClose();
@@ -60,6 +62,13 @@ function NewTaskForm({ isOpen, onOpen, onClose, data, setData, saveData }) {
             <Input
               placeholder="Enter a description"
               onChange={(event) => setDescriptionVal(event.target.value)}
+            />
+          </FormControl>
+          <FormControl>
+            <FormLabel>Due by</FormLabel>
+            <input
+              type="date"
+              onChange={(event) => setDateValue(event.target.value)}
             />
           </FormControl>
         </ModalBody>

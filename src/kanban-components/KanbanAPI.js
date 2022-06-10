@@ -25,24 +25,28 @@ export default class KanbanAPI {
   }
 
   static updateTask(data, setData, taskId, newContent) {
-    for (const column of data) {
+    const newData = [...data];
+    for (const column of newData) {
       const taskIndex = column.items.findIndex((task) => task.id === taskId);
       if (taskIndex !== -1) {
         column.items[taskIndex].content = newContent;
         break;
       }
     }
-    return setData(data);
+    setData(newData);
+    return newData;
   }
 
   static deleteTask(data, setData, taskId) {
-    for (const column of data) {
+    const newData = [...data];
+    for (const column of newData) {
       const taskIndex = column.items.findIndex((task) => task.id === taskId);
       if (taskIndex !== -1) {
         column.items.splice(taskIndex, 1);
         break;
       }
     }
-    return setData(data);
+    setData(newData);
+    return newData;
   }
 }
