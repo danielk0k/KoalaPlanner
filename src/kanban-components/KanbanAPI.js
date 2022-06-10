@@ -10,18 +10,18 @@ export default class KanbanAPI {
     return newData;
   }
 
-  static moveTask(data, setData, taskId, newColumnId, newPosition) {
-    for (const column of data) {
-      const taskIndex = column.items.findIndex((task) => task.id === taskId);
-      if (taskIndex !== -1) {
-        const task = column.items.splice(taskIndex, 1)[0];
-        data
-          .find((col) => col.id === newColumnId)
-          .items.splice(newPosition, 0, task);
-        break;
-      }
-    }
-    return setData(data);
+  static moveTask(data, setData, destination, source) {
+    const newData = [...data];
+    const srcColIndex = newData.findIndex(
+      (column) => column.id === source.droppableId
+    );
+    const destColIndex = newData.findIndex(
+      (column) => column.id === destination.droppableId
+    );
+    const task = newData[srcColIndex].items.splice(source.index, 1)[0];
+    newData[destColIndex].items.splice(destination.index, 0, task);
+    setData(newData);
+    return newData;
   }
 
   static updateTask(data, setData, taskId, newContent) {

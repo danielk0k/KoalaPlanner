@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
+import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
 import NewTaskForm from "./NewTaskForm";
-import { DragDropContext } from "react-beautiful-dnd";
+import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
   Flex,
@@ -82,7 +83,26 @@ function Board() {
   };
 
   const handleOnDragEnd = (result) => {
-    // TODO
+    /*
+      Some notes here:
+        destination/ source: {
+          droppableId => columnId
+          index => position in column.items list
+        }
+        draggableId => taskId
+    */
+    const { destination, source } = result;
+
+    if (
+      !destination ||
+      (destination.droppableId === source.droppableId &&
+        destination.index === source.index)
+    ) {
+      console.log("same position");
+      return;
+    }
+
+    saveData(KanbanAPI.moveTask(data, setData, destination, source));
   };
 
   return (
