@@ -7,7 +7,7 @@ import App from "./App";
 import RegisterForm from "./auth-components/RegisterForm";
 import LoginForm from "./auth-components/LoginForm";
 import Profile from "./profile-components/Profile";
-import Board from "./kanban-components/Index";
+import Board from "./kanban-components/index";
 import Settings from "./settings-components/index";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

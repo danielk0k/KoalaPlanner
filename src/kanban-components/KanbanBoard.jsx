@@ -14,7 +14,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 
-function Board() {
+function KanbanBoard() {
   const [data, setData] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const session = supabaseClient.auth.session();
@@ -152,4 +152,4 @@ function Board() {
   );
 }
 
-export default Board;
+export default KanbanBoard;

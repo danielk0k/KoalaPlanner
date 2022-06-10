@@ -1,12 +1,12 @@
 import Navbar from "../ui-components/Navbar";
-import Board from "./KanbanBoard";
+import KanbanBoard from "./KanbanBoard";
 
-function Index() {
+function Board() {
   return (
     <Navbar>
-      <Board />
+      <KanbanBoard />
     </Navbar>
   );
 }
 
-export default Index;
+export default Board;
