@@ -98,8 +98,7 @@ function Board() {
       (destination.droppableId === source.droppableId &&
         destination.index === source.index)
     ) {
-      console.log("same position");
-      return;
+      return; // Do nothing
     }
 
     saveData(KanbanAPI.moveTask(data, setData, destination, source));
