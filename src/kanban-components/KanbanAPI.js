@@ -7,6 +7,7 @@ export default class KanbanAPI {
     const newData = [...data];
     newData.find((column) => column.id === columnId).items.push(newTask);
     setData(newData);
+    return newData;
   }
 
   static moveTask(data, setData, taskId, newColumnId, newPosition) {

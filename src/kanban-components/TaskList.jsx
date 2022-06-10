@@ -1,20 +1,8 @@
-import React from "react";
-import { Box, Text } from "@chakra-ui/react";
+import TaskCard from "./TaskCard";
 
 function TaskList({ data, columnId }) {
   const column = data.find((col) => col.id === columnId);
-  return column.items.map((task) => (
-    <Box
-      rounded={"lg"}
-      backgroundColor="#FFFFFF"
-      boxShadow={"lg"}
-      borderWidth={1}
-      padding={4}
-      key={task.id}
-    >
-      <Text>{task.content}</Text>
-    </Box>
-  ));
+  return column.items.map((task) => <TaskCard task={task} />);
 }
 
 export default TaskList;
