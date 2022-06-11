@@ -12,6 +12,7 @@ import {
   Button,
   Heading,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 function RegisterForm() {
@@ -20,6 +21,7 @@ function RegisterForm() {
   const [password, setPassword] = useState("");
   const [name, setName] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleRegister = async (event) => {
     event.preventDefault();
@@ -46,11 +48,25 @@ function RegisterForm() {
         throw upsertError;
       }
 
-      alert("Successfully created new user.");
+      toast({
+        title: "Successful sign up.",
+        description: `Welcome ${name}!.`,
+        status: "success",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       navigate("/app/profile", { replace: true });
     } catch (error) {
-      alert("Error in creating new user.");
-      console.log(error.error_description || error.message);
+      toast({
+        title: "Please try signing up again.",
+        description: `${error.message}`,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -85,7 +101,7 @@ function RegisterForm() {
                   <Input
                     id="username"
                     type="text"
-                    required
+                    isRequired
                     onChange={(event) => setName(event.target.value)}
                   />
                 </FormControl>
@@ -94,7 +110,7 @@ function RegisterForm() {
                   <Input
                     id="email"
                     type="email"
-                    required
+                    isRequired
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
@@ -104,7 +120,7 @@ function RegisterForm() {
                     id="password"
                     type="password"
                     minLength="6"
-                    required
+                    isRequired
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>

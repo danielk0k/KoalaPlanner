@@ -1,8 +1,8 @@
 import TaskCard from "./TaskCard";
 import { Droppable } from "react-beautiful-dnd";
-import { Heading, Box, Stack } from "@chakra-ui/react";
+import { Heading, Text, Box, Circle, Stack, HStack } from "@chakra-ui/react";
 
-function Column({ data, columnId, columnName }) {
+function Column({ data, columnId, columnName, deleteTask }) {
   const column = data.find((col) => col.id === columnId);
   return (
     <>
@@ -13,14 +13,24 @@ function Column({ data, columnId, columnName }) {
         borderWidth={1}
         padding={4}
       >
-        <Heading size="md">{columnName}</Heading>
+        <HStack>
+          <Heading size="md">{columnName}</Heading>
+          <Circle size="25px" borderWidth="1px" borderColor="gray.500">
+            <Text color="gray.500">{column.items.length}</Text>
+          </Circle>
+        </HStack>
       </Box>
       <Droppable droppableId={columnId}>
         {(provided) => (
           <div ref={provided.innerRef} {...provided.droppableProps}>
             <Stack spacing={4}>
               {column.items.map((task, index) => (
-                <TaskCard task={task} index={index} key={task.id} />
+                <TaskCard
+                  key={task.id}
+                  task={task}
+                  index={index}
+                  deleteTask={deleteTask}
+                />
               ))}
               {provided.placeholder}
             </Stack>

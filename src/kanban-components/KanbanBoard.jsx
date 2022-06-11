@@ -104,6 +104,10 @@ function KanbanBoard() {
     saveData(KanbanAPI.moveTask(data, setData, destination, source));
   };
 
+  const handleDeleteTask = (taskId) => {
+    saveData(KanbanAPI.deleteTask(data, setData, taskId));
+  };
+
   return (
     <>
       <NewTaskForm
@@ -126,7 +130,12 @@ function KanbanBoard() {
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Flex>
               <Stack spacing={4} width="30%">
-                <Column data={data} columnId="to_do" columnName="To Do" />
+                <Column
+                  data={data}
+                  columnId="to_do"
+                  columnName="To Do"
+                  deleteTask={handleDeleteTask}
+                />
               </Stack>
               <Spacer width="20%" />
               <Stack spacing={4} width="30%">
@@ -134,6 +143,7 @@ function KanbanBoard() {
                   data={data}
                   columnId="in_progress"
                   columnName="In Progress"
+                  deleteTask={handleDeleteTask}
                 />
               </Stack>
               <Spacer width="20%" />
@@ -142,6 +152,7 @@ function KanbanBoard() {
                   data={data}
                   columnId="completed"
                   columnName="Completed"
+                  deleteTask={handleDeleteTask}
                 />
               </Stack>
             </Flex>
