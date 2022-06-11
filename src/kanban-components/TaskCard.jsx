@@ -1,58 +1,20 @@
-import {
-  Box,
-  Text,
-  Heading,
-  Stack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
-  Button,
-  ButtonGroup,
-} from "@chakra-ui/react";
+import { Box, Text, Heading, Stack, useDisclosure } from "@chakra-ui/react";
 import { Draggable } from "react-beautiful-dnd";
 import "./Shaking.css";
+import TaskCardDialog from "./TaskCardDialog";
 
-function TaskCard({ task, index, deleteTask }) {
+function TaskCard({ task, index, deleteTask, updateTask }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
-      <Modal isOpen={isOpen} onClose={onClose} size="lg">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            <Heading size="md">{task.content.title}</Heading>
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Stack spacing={4}>
-              <Text>{task.content.description}</Text>
-              {task.content.date ? (
-                <Text>Due by {task.content.date}</Text>
-              ) : (
-                <></>
-              )}
-            </Stack>
-          </ModalBody>
-          <ModalFooter>
-            <ButtonGroup spacing={4}>
-              <Button
-                onClick={() => {
-                  deleteTask(task.id);
-                  onClose();
-                }}
-              >
-                Delete
-              </Button>
-              <Button onClick={onClose}>Close</Button>
-            </ButtonGroup>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      <TaskCardDialog
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        task={task}
+        deleteTask={deleteTask}
+        updateTask={updateTask}
+      />
       <Draggable draggableId={task.id.toString()} index={index}>
         {(provided, snapshot) => (
           <div

@@ -2,7 +2,7 @@ import TaskCard from "./TaskCard";
 import { Droppable } from "react-beautiful-dnd";
 import { Heading, Text, Box, Circle, Stack, HStack } from "@chakra-ui/react";
 
-function Column({ data, columnId, columnName, deleteTask }) {
+function Column({ data, columnId, columnName, deleteTask, updateTask }) {
   const column = data.find((col) => col.id === columnId);
   return (
     <>
@@ -30,6 +30,7 @@ function Column({ data, columnId, columnName, deleteTask }) {
                   task={task}
                   index={index}
                   deleteTask={deleteTask}
+                  updateTask={updateTask}
                 />
               ))}
               {provided.placeholder}

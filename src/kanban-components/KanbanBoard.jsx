@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext } from "react-beautiful-dnd";
 import Column from "./Column";
-import NewTaskForm from "./NewTaskForm";
+import TaskForm from "./TaskForm";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
@@ -104,6 +104,10 @@ function KanbanBoard() {
     saveData(KanbanAPI.moveTask(data, setData, destination, source));
   };
 
+  const handleNewTask = (columnId, newContent) => {
+    saveData(KanbanAPI.insertTask(data, setData, columnId, newContent));
+  };
+
   const handleDeleteTask = (taskId) => {
     saveData(KanbanAPI.deleteTask(data, setData, taskId));
   };
@@ -120,13 +124,11 @@ function KanbanBoard() {
 
   return (
     <>
-      <NewTaskForm
+      <TaskForm
         isOpen={isOpen}
         onOpen={onOpen}
         onClose={onClose}
-        data={data}
-        setData={setData}
-        saveData={saveData}
+        newTask={handleNewTask}
       />
       <Stack spacing={8}>
         <Flex>
@@ -147,6 +149,7 @@ function KanbanBoard() {
                       columnId={value.id}
                       columnName={value.title}
                       deleteTask={handleDeleteTask}
+                      updateTask={handleUpdateTask}
                     />
                   </Stack>
                   <Spacer width="20%" />
