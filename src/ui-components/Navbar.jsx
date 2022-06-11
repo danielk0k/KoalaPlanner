@@ -50,7 +50,7 @@ export default function Navbar({ children }) {
       </Drawer>
       {/* mobilenav */}
       <MobileNav onOpen={onOpen} display={{ base: "flex", md: "none" }} />
-      <Box ml={{ base: 0, md: 60 }} p={3} pl={10}>
+      <Box ml={{ base: 0, md: 60 }} p={6}>
         {children}
       </Box>
     </Box>
@@ -74,7 +74,7 @@ const SidebarContent = ({ onClose, ...rest }) => {
         <CloseButton display={{ base: "flex", md: "none" }} onClick={onClose} />
       </Flex>
       {LinkItems.map((link) => (
-        <NavItem item={link} />
+        <NavItem item={link} key={link.name} />
       ))}
     </Box>
   );

@@ -12,6 +12,7 @@ import {
   Button,
   Heading,
   Text,
+  useToast,
 } from "@chakra-ui/react";
 
 function LoginForm() {
@@ -19,6 +20,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleLogin = async (event) => {
     event.preventDefault();
@@ -33,11 +35,25 @@ function LoginForm() {
       if (error) {
         throw error;
       }
-      alert("Successfully logged in.");
+      toast({
+        title: "Successful login.",
+        description: "Welcome back!",
+        status: "success",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       navigate("/app/profile", { replace: true });
     } catch (error) {
-      alert("Error in logging in.");
-      console.log(error.error_description || error.message);
+      toast({
+        title: "Invalid login credentials.",
+        description: "Please try logging in again.",
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
+      console.log(error.message);
     } finally {
       setLoading(false);
     }
@@ -71,7 +87,7 @@ function LoginForm() {
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input
                     type="email"
-                    required
+                    isRequired
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
@@ -79,7 +95,7 @@ function LoginForm() {
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <Input
                     type="password"
-                    required
+                    isRequired
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>
@@ -102,7 +118,10 @@ function LoginForm() {
                 <Text>LOGIN</Text>
               </Button>
               <Text textAlign={"center"}>
-                Don't have an account? <Link to="/app/signup">Sign Up</Link>
+                Don't have an account?{" "}
+                <Link to="/app/signup">
+                  <Text as="u">Sign Up</Text>
+                </Link>
               </Text>
             </Stack>
           </form>

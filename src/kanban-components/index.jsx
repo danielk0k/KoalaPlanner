@@ -1,8 +1,7 @@
-import React from "react";
 import Navbar from "../ui-components/Navbar";
 import KanbanBoard from "./KanbanBoard";
 
-function index() {
+function Board() {
   return (
     <Navbar>
       <KanbanBoard />
@@ -10,4 +9,4 @@ function index() {
   );
 }
 
-export default index;
+export default Board;

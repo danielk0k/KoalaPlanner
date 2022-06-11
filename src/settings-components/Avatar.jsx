@@ -18,7 +18,7 @@ export default function ProfilePicture() {
         data: userData,
         error,
         status,
-      } = await supabaseClient.from("profiles").select(`avatar_url`).single();
+      } = await supabaseClient.from("profiles").select("avatar_url").single();
 
       if (error && status !== 406) {
         throw error;
