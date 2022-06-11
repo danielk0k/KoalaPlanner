@@ -36,6 +36,10 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
       date: dateValue,
       color: colorValue,
     });
+    setTitleValue("");
+    setDescriptionVal("");
+    setDateValue(new Date());
+    setColorValue("#f1c40f");
     onClose();
   };
 
