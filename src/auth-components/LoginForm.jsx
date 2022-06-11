@@ -118,7 +118,10 @@ function LoginForm() {
                 <Text>LOGIN</Text>
               </Button>
               <Text textAlign={"center"}>
-                Don't have an account? <Link to="/app/signup">Sign Up</Link>
+                Don't have an account?{" "}
+                <Link to="/app/signup">
+                  <Text as="u">Sign Up</Text>
+                </Link>
               </Text>
             </Stack>
           </form>

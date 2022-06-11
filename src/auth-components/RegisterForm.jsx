@@ -50,7 +50,7 @@ function RegisterForm() {
 
       toast({
         title: "Successful sign up.",
-        description: `Welcome ${name}!.`,
+        description: `Welcome ${name}!`,
         status: "success",
         position: "top-right",
         duration: 4000,
@@ -142,7 +142,10 @@ function RegisterForm() {
                 <Text>REGISTER</Text>
               </Button>
               <Text textAlign={"center"}>
-                Already have an account? <Link to="/app/login">Login here</Link>
+                Already have an account?{" "}
+                <Link to="/app/login">
+                  <Text as="u">Login here</Text>
+                </Link>
               </Text>
             </Stack>
           </form>
