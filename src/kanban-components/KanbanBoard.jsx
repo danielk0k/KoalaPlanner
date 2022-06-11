@@ -108,6 +108,16 @@ function KanbanBoard() {
     saveData(KanbanAPI.deleteTask(data, setData, taskId));
   };
 
+  const handleUpdateTask = (taskId, newContent) => {
+    saveData(KanbanAPI.updateTask(data, setData, taskId, newContent));
+  };
+
+  const columnList = [
+    { id: "to_do", title: "To Do" },
+    { id: "in_progress", title: "In Progress" },
+    { id: "completed", title: "Completed" },
+  ];
+
   return (
     <>
       <NewTaskForm
@@ -129,32 +139,19 @@ function KanbanBoard() {
         ) : (
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Flex>
-              <Stack spacing={4} width="30%">
-                <Column
-                  data={data}
-                  columnId="to_do"
-                  columnName="To Do"
-                  deleteTask={handleDeleteTask}
-                />
-              </Stack>
-              <Spacer width="20%" />
-              <Stack spacing={4} width="30%">
-                <Column
-                  data={data}
-                  columnId="in_progress"
-                  columnName="In Progress"
-                  deleteTask={handleDeleteTask}
-                />
-              </Stack>
-              <Spacer width="20%" />
-              <Stack spacing={4} width="30%">
-                <Column
-                  data={data}
-                  columnId="completed"
-                  columnName="Completed"
-                  deleteTask={handleDeleteTask}
-                />
-              </Stack>
+              {columnList.map((value) => (
+                <>
+                  <Stack spacing={4} width="30%">
+                    <Column
+                      data={data}
+                      columnId={value.id}
+                      columnName={value.title}
+                      deleteTask={handleDeleteTask}
+                    />
+                  </Stack>
+                  <Spacer width="20%" />
+                </>
+              ))}
             </Flex>
           </DragDropContext>
         )}

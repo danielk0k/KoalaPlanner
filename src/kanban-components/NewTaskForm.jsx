@@ -105,6 +105,10 @@ function NewTaskForm({ isOpen, onOpen, onClose, data, setData, saveData }) {
                     borderRadius={50}
                     backgroundColor={value}
                     value={value}
+                    borderWidth={2}
+                    borderColor={
+                      value === colorValue ? "gray.500" : "transparent"
+                    }
                   ></Button>
                 ))}
               </ButtonGroup>
@@ -112,7 +116,7 @@ function NewTaskForm({ isOpen, onOpen, onClose, data, setData, saveData }) {
           </Stack>
         </ModalBody>
         <ModalFooter>
-          <ButtonGroup spacing={8}>
+          <ButtonGroup spacing={4}>
             <Button onClick={handleNewTask}>Save</Button>
             <Button onClick={onClose}>Close</Button>
           </ButtonGroup>

@@ -39,7 +39,7 @@ function TaskCard({ task, index, deleteTask }) {
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <ButtonGroup>
+            <ButtonGroup spacing={4}>
               <Button
                 onClick={() => {
                   deleteTask(task.id);
