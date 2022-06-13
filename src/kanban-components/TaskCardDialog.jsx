@@ -47,8 +47,8 @@ function TaskCardDialog({
           <ModalBody>
             <Stack spacing={4}>
               <Text>{task.content.description}</Text>
-              {task.content.date ? (
-                <Text>Due by {task.content.date}</Text>
+              {task.content.due_date ? (
+                <Text>Due by {task.content.due_date}</Text>
               ) : (
                 <></>
               )}

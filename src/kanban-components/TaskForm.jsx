@@ -24,7 +24,7 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     task ? task.content.description : ""
   );
   const [dateValue, setDateValue] = useState(
-    task ? task.content.date : new Date()
+    task ? task.content.due_date : new Date().toJSON().slice(0, 10)
   );
   const [colorValue, setColorValue] = useState(
     task ? task.content.color : "#f1c40f"
@@ -34,12 +34,13 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     newTask(selectValue, {
       title: titleValue,
       description: descriptionVal,
-      date: dateValue,
+      due_date: dateValue,
       color: colorValue,
+      completed_on: "",
     });
     setTitleValue("");
     setDescriptionVal("");
-    setDateValue(new Date());
+    setDateValue(new Date().toJSON().slice(0, 10));
     setColorValue("#f1c40f");
     onClose();
   };
@@ -48,8 +49,9 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     updateTask(task.id, {
       title: titleValue,
       description: descriptionVal,
-      date: dateValue,
+      due_date: dateValue,
       color: colorValue,
+      completed_on: "",
     });
     onClose();
   };

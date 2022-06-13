@@ -37,8 +37,8 @@ function TaskCard({ task, index, deleteTask, updateTask }) {
               <Stack spacing={4}>
                 <Heading size="md">{task.content.title}</Heading>
                 <Text>{task.content.description}</Text>
-                {task.content.date ? (
-                  <Text>Due by {task.content.date}</Text>
+                {task.content.due_date ? (
+                  <Text>Due by {task.content.due_date}</Text>
                 ) : (
                   <></>
                 )}

@@ -143,6 +143,7 @@ function KanbanBoard() {
             <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
               {columnList.map((value) => (
                 <Column
+                  key={value.id}
                   data={data}
                   columnId={value.id}
                   columnName={value.title}
