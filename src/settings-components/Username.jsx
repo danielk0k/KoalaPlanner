@@ -8,18 +8,24 @@ import {
   Button,
   Text,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 
 function Username() {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const user = supabaseClient.auth.user();
+  const toast = useToast();
 
   const updateUsername = async (e) => {
     e.preventDefault();
 
     try {
       setLoading(true);
+
+      if (username.length === 0) {
+        throw new Error("Please enter a username.");
+      }
 
       const updates = {
         id: user.id,
@@ -34,23 +40,41 @@ function Username() {
       if (error) {
         throw error;
       }
+
+      toast({
+        title: "Username successfully updated.",
+        description: `Hello ${username}`,
+        status: "success",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
     } catch (error) {
-      alert("Error in updating profile.");
+      toast({
+        title: "Error in updating username.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       console.log(error.message);
     } finally {
       setLoading(false);
+      setUsername("");
     }
   };
 
   return (
     <form onSubmit={updateUsername}>
-      <FormControl id="username">
-        <FormLabel htmlFor="text">Username</FormLabel>
+      <FormControl>
+        <FormLabel htmlFor="username">Username</FormLabel>
         <Stack spacing={4}>
           <Input
             id="username"
             type="text"
             placeholder="Enter new username"
+            value={username}
             onChange={(event) => setUsername(event.target.value)}
           />
           <Button

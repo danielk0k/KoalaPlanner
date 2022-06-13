@@ -83,19 +83,17 @@ function LoginForm() {
           <form onSubmit={handleLogin}>
             <Stack spacing={10}>
               <Stack spacing={4}>
-                <FormControl id="email">
+                <FormControl isRequired>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input
                     type="email"
-                    isRequired
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
-                <FormControl id="password">
+                <FormControl isRequired>
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <Input
                     type="password"
-                    isRequired
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>

@@ -96,31 +96,28 @@ function RegisterForm() {
           <form onSubmit={handleRegister}>
             <Stack spacing={10}>
               <Stack spacing={4}>
-                <FormControl id="username">
-                  <FormLabel htmlFor="text">Username</FormLabel>
+                <FormControl isRequired>
+                  <FormLabel htmlFor="username">Username</FormLabel>
                   <Input
                     id="username"
                     type="text"
-                    isRequired
                     onChange={(event) => setName(event.target.value)}
                   />
                 </FormControl>
-                <FormControl id="email">
+                <FormControl isRequired>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input
                     id="email"
                     type="email"
-                    isRequired
                     onChange={(event) => setEmail(event.target.value)}
                   />
                 </FormControl>
-                <FormControl id="password">
+                <FormControl isRequired>
                   <FormLabel htmlFor="password">Password</FormLabel>
                   <Input
                     id="password"
                     type="password"
                     minLength="6"
-                    isRequired
                     onChange={(event) => setPassword(event.target.value)}
                   />
                 </FormControl>
