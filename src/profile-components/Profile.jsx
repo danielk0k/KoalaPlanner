@@ -8,8 +8,11 @@ import {
   Stack,
   Box,
   Avatar,
-  Text,
   HStack,
+  Stat,
+  StatGroup,
+  StatNumber,
+  StatLabel,
 } from "@chakra-ui/react";
 
 function Profile() {
@@ -17,7 +20,6 @@ function Profile() {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [data, setData] = useState(null);
   const session = supabaseClient.auth.session();
-  const navigate = useNavigate();
 
   useEffect(() => {
     getProfile();
@@ -97,90 +99,66 @@ function Profile() {
               <Heading size="md">View your achievements and statistics</Heading>
               <HStack spacing={8}>
                 <Avatar size="2xl" src={avatarUrl} />
-                <Heading>Welcome back {username}</Heading>
+                <Heading size="lg">
+                  Welcome back <Heading>{username}</Heading>
+                </Heading>
               </HStack>
-              <Stack direction={{ base: "column", lg: "row" }} spacing={8}>
-                <HStack>
-                  <Box
-                    borderColor="#34495E"
-                    borderRadius="lg"
-                    borderWidth={2}
-                    textColor="#34495E"
-                    textAlign="center"
-                    padding={4}
-                  >
-                    <Heading>
-                      {data === null || data.length === 0
-                        ? 0
-                        : data.reduce((total, column) => {
-                            if (column.id !== "completed") {
-                              return total + column.items.length;
+              <Heading size="lg">Task Breakdown</Heading>
+              <StatGroup>
+                <Stat textAlign="center">
+                  <StatNumber fontSize="4xl">
+                    {data === null || data.length === 0
+                      ? 0
+                      : data.reduce((total, column) => {
+                          if (column.id !== "completed") {
+                            return total + column.items.length;
+                          } else {
+                            return total;
+                          }
+                        }, 0)}
+                  </StatNumber>
+                  <StatLabel fontSize="lg">Currently Pending</StatLabel>
+                </Stat>
+                <Stat textAlign="center">
+                  <StatNumber fontSize="4xl">
+                    {data === null || data.length === 0
+                      ? 0
+                      : data.reduce((total, column) => {
+                          if (column.id !== "completed") {
+                            return (
+                              total +
+                              column.items.reduce((subtotal, task) => {
+                                if (isInThisWeek(task.content.due_date)) {
+                                  return subtotal + 1;
+                                } else {
+                                  return subtotal;
+                                }
+                              }, 0)
+                            );
+                          } else {
+                            return total;
+                          }
+                        }, 0)}
+                  </StatNumber>
+                  <StatLabel fontSize="lg">Due This Week</StatLabel>
+                </Stat>
+                <Stat textAlign="center">
+                  <StatNumber fontSize="4xl">
+                    {data === null || data.length === 0
+                      ? 0
+                      : data
+                          .find((column) => column.id === "completed")
+                          .items.reduce((total, task) => {
+                            if (isInThisWeek(task.content.completed_on)) {
+                              return total + 1;
                             } else {
                               return total;
                             }
                           }, 0)}
-                    </Heading>
-                    <Text>TASKS CURRENTLY PENDING</Text>
-                  </Box>
-                </HStack>
-                <HStack>
-                  <Box
-                    borderColor="#34495E"
-                    borderRadius="lg"
-                    borderWidth={2}
-                    textColor="#34495E"
-                    textAlign="center"
-                    padding={4}
-                  >
-                    <Heading>
-                      {data === null || data.length === 0
-                        ? 0
-                        : data
-                            .find((column) => column.id === "completed")
-                            .items.reduce((total, task) => {
-                              if (isInThisWeek(task.content.completed_on)) {
-                                return total + 1;
-                              } else {
-                                return total;
-                              }
-                            }, 0)}
-                    </Heading>
-                    <Text>TASKS COMPLETED THIS WEEK</Text>
-                  </Box>
-                </HStack>
-                <HStack>
-                  <Box
-                    borderColor="#34495E"
-                    borderRadius="lg"
-                    borderWidth={2}
-                    textColor="#34495E"
-                    textAlign="center"
-                    padding={4}
-                  >
-                    <Heading>
-                      {data === null || data.length === 0
-                        ? 0
-                        : data.reduce((total, column) => {
-                            if (column.id !== "completed") {
-                              return (
-                                total +
-                                column.items.reduce((subtotal, task) => {
-                                  if (isInThisWeek(task.content.due_date)) {
-                                    return subtotal + 1;
-                                  } else {
-                                    return subtotal;
-                                  }
-                                }, 0)
-                              );
-                            } else {
-                              return total;
-                            }
-                          }, 0)}
-                    </Heading>
-                    <Text>TASKS DUE THIS WEEK</Text>
-                  </Box>
-                </HStack>
-              </Stack>
+                  </StatNumber>
+                  <StatLabel fontSize="lg">Completed This Week</StatLabel>
+                </Stat>
+              </StatGroup>
             </Stack>
           </Box>
         </Flex>
