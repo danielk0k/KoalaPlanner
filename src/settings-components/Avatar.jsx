@@ -13,7 +13,7 @@ export default function ProfilePicture() {
 
   useEffect(() => {
     getAvatarImage();
-  }, [avatarFilePath]);
+  }, [uploading]);
 
   const getAvatarImage = async () => {
     try {
@@ -78,7 +78,7 @@ export default function ProfilePicture() {
 
       const file = event.target.files[0];
       const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      const fileName = `${user.id}.${fileExt}`;
       const filePath = `${fileName}`;
 
       let { error } = await supabaseClient.storage
@@ -102,7 +102,6 @@ export default function ProfilePicture() {
       if (upsertError) {
         throw upsertError;
       }
-      setAvatarFilePath(filePath);
       toast({
         title: "Avatar successfully updated.",
         description: "Looking good!",
