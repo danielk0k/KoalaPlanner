@@ -4,7 +4,6 @@ import supabaseClient from "../auth-components/supabaseClient";
 import {
   FormControl,
   FormLabel,
-  FormHelperText,
   Input,
   Button,
   Text,
@@ -41,9 +40,13 @@ function Credential() {
       if (error) {
         throw error;
       }
+
       toast({
         title: "Credentials successfully updated.",
-        description: "Try not to lose your password!",
+        description:
+          email.length === 0
+            ? "Try not to lose your password!"
+            : "You will receive an email confirmation for the new address.",
         status: "success",
         position: "top-right",
         duration: 4000,
@@ -78,9 +81,6 @@ function Credential() {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
-          <FormHelperText>
-            You will receive a confirmation email for the new address.
-          </FormHelperText>
         </FormControl>
         <FormControl>
           <FormLabel htmlFor="password">Password</FormLabel>

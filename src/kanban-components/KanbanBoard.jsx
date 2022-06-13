@@ -140,22 +140,17 @@ function KanbanBoard() {
           <Skeleton height="50px" />
         ) : (
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Flex>
+            <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
               {columnList.map((value) => (
-                <>
-                  <Stack spacing={4} width="30%">
-                    <Column
-                      data={data}
-                      columnId={value.id}
-                      columnName={value.title}
-                      deleteTask={handleDeleteTask}
-                      updateTask={handleUpdateTask}
-                    />
-                  </Stack>
-                  <Spacer width="20%" />
-                </>
+                <Column
+                  data={data}
+                  columnId={value.id}
+                  columnName={value.title}
+                  deleteTask={handleDeleteTask}
+                  updateTask={handleUpdateTask}
+                />
               ))}
-            </Flex>
+            </Stack>
           </DragDropContext>
         )}
       </Stack>

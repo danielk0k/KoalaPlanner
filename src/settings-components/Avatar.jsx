@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
-import { Avatar, Text, HStack, Stack, useToast } from "@chakra-ui/react";
+import { Avatar, Text, VStack, Stack, useToast } from "@chakra-ui/react";
 
 export default function ProfilePicture() {
   const [avatarUrl, setAvatarUrl] = useState(null);
@@ -120,9 +120,9 @@ export default function ProfilePicture() {
   };
 
   return (
-    <HStack spacing={8}>
+    <Stack direction={{ base: "column", lg: "row" }} spacing={8}>
       <Avatar size="2xl" src={avatarUrl} />
-      <Stack>
+      <VStack align="left">
         <Text>Upload an avatar</Text>
         <input
           type="file"
@@ -131,7 +131,7 @@ export default function ProfilePicture() {
           onChange={uploadAvatarImage}
           disabled={uploading}
         />
-      </Stack>
-    </HStack>
+      </VStack>
+    </Stack>
   );
 }
