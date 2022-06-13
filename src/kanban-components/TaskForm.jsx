@@ -61,7 +61,7 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     "#2ecc71",
     "#3498db",
     "#9b59b6",
-    "#34495e",
+    "#2c3e50",
   ];
 
   return (

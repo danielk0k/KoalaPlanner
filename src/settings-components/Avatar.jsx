@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
-import { Avatar, Text, HStack, Stack } from "@chakra-ui/react";
+import { Avatar, Text, VStack, Stack, useToast } from "@chakra-ui/react";
 
 export default function ProfilePicture() {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
   const user = supabaseClient.auth.user();
+  const toast = useToast();
 
   useEffect(() => {
     getAvatarImage();
@@ -37,7 +38,14 @@ export default function ProfilePicture() {
         setAvatarFilePath(userData.avatar_url);
       }
     } catch (error) {
-      alert("Error in getting profile picture.");
+      toast({
+        title: "Error in retrieving avatar.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       console.log(error.message);
     }
   };
@@ -50,6 +58,7 @@ export default function ProfilePicture() {
         throw new Error("You must select an image to upload.");
       }
 
+      // Remove previous profile picture from storage.
       if (avatarFilePath) {
         const { error } = await supabaseClient.storage
           .from("avatars")
@@ -87,8 +96,23 @@ export default function ProfilePicture() {
         throw upsertError;
       }
       setAvatarFilePath(filePath);
+      toast({
+        title: "Avatar successfully updated.",
+        description: "Looking good!",
+        status: "success",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
     } catch (error) {
-      alert("Error in updating profile picture.");
+      toast({
+        title: "Error in updating avatar.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       console.log(error.message);
     } finally {
       setUploading(false);
@@ -96,9 +120,9 @@ export default function ProfilePicture() {
   };
 
   return (
-    <HStack spacing={8}>
+    <Stack direction={{ base: "column", lg: "row" }} spacing={8}>
       <Avatar size="2xl" src={avatarUrl} />
-      <Stack>
+      <VStack align="left">
         <Text>Upload an avatar</Text>
         <input
           type="file"
@@ -107,7 +131,7 @@ export default function ProfilePicture() {
           onChange={uploadAvatarImage}
           disabled={uploading}
         />
-      </Stack>
-    </HStack>
+      </VStack>
+    </Stack>
   );
 }

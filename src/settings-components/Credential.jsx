@@ -8,12 +8,14 @@ import {
   Button,
   Text,
   Stack,
+  useToast,
 } from "@chakra-ui/react";
 
 function Credential() {
   const [loading, setLoading] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const toast = useToast();
 
   const updateCredential = async (e) => {
     e.preventDefault();
@@ -23,7 +25,9 @@ function Credential() {
 
       var updatePayload;
 
-      if (password.length === 0) {
+      if (password.length === 0 && email.length === 0) {
+        throw new Error("Please enter something.");
+      } else if (password.length === 0) {
         updatePayload = { email: email };
       } else if (email.length === 0) {
         updatePayload = { password: password };
@@ -36,32 +40,55 @@ function Credential() {
       if (error) {
         throw error;
       }
+
+      toast({
+        title: "Credentials successfully updated.",
+        description:
+          email.length === 0
+            ? "Try not to lose your password!"
+            : "You will receive an email confirmation for the new address.",
+        status: "success",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
     } catch (error) {
-      alert("Error in updating credential.");
+      toast({
+        title: "Error in updating credential.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       console.log(error.message);
     } finally {
       setLoading(false);
+      setEmail("");
+      setPassword("");
     }
   };
 
   return (
     <form onSubmit={updateCredential}>
       <Stack spacing={4}>
-        <FormControl id="email">
-          <FormLabel htmlFor="text">Email</FormLabel>
+        <FormControl>
+          <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             id="email"
             type="email"
             placeholder="Enter new email address"
+            value={email}
             onChange={(event) => setEmail(event.target.value)}
           />
         </FormControl>
-        <FormControl id="password">
-          <FormLabel htmlFor="text">Password</FormLabel>
+        <FormControl>
+          <FormLabel htmlFor="password">Password</FormLabel>
           <Input
             id="password"
             type="password"
             placeholder="Enter new password"
+            value={password}
             minLength="6"
             onChange={(event) => setPassword(event.target.value)}
           />
