@@ -14,6 +14,7 @@ import {
   Button,
   Stack,
   ButtonGroup,
+  Container,
 } from "@chakra-ui/react";
 
 function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
@@ -75,7 +76,7 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
             {task ? (
               <></>
             ) : (
-              <FormControl>
+              <FormControl isRequired>
                 <FormLabel>Category</FormLabel>
                 <Select
                   placeholder="Select option"
@@ -88,23 +89,21 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
                 </Select>
               </FormControl>
             )}
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Title</FormLabel>
               <Input
                 type="text"
                 placeholder="Enter a title"
                 value={titleValue}
-                isRequired
                 onChange={(event) => setTitleValue(event.target.value)}
               />
             </FormControl>
-            <FormControl>
+            <FormControl isRequired>
               <FormLabel>Description</FormLabel>
               <Input
                 type="text"
                 placeholder="Enter a description"
                 value={descriptionVal}
-                isRequired
                 onChange={(event) => setDescriptionVal(event.target.value)}
               />
             </FormControl>
@@ -118,24 +117,26 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
             </FormControl>
             <FormControl>
               <FormLabel>Tag colour</FormLabel>
-              <ButtonGroup
-                spacing={4}
-                variant="solid"
-                onClick={(event) => setColorValue(event.target.value)}
-              >
-                {colors.map((value) => (
-                  <Button
-                    key={value}
-                    borderRadius={50}
-                    backgroundColor={value}
-                    value={value}
-                    borderWidth={2}
-                    borderColor={
-                      value === colorValue ? "gray.500" : "transparent"
-                    }
-                  ></Button>
-                ))}
-              </ButtonGroup>
+              <Container overflow="scroll" padding={2}>
+                <ButtonGroup
+                  spacing={4}
+                  variant="solid"
+                  onClick={(event) => setColorValue(event.target.value)}
+                >
+                  {colors.map((value) => (
+                    <Button
+                      key={value}
+                      borderRadius={50}
+                      backgroundColor={value}
+                      value={value}
+                      borderWidth={3}
+                      borderColor={
+                        value === colorValue ? "gray.300" : "transparent"
+                      }
+                    ></Button>
+                  ))}
+                </ButtonGroup>
+              </Container>
             </FormControl>
           </Stack>
         </ModalBody>
