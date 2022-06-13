@@ -3,15 +3,7 @@ import ProfilePicture from "./Avatar";
 import Username from "./Username";
 import Credential from "./Credential";
 import Navbar from "../ui-components/Navbar";
-import {
-  Heading,
-  Text,
-  Stack,
-  VStack,
-  Divider,
-  Box,
-  Spacer,
-} from "@chakra-ui/react";
+import { Heading, Text, Stack, Divider, Box, Spacer } from "@chakra-ui/react";
 
 function Settings() {
   return (
