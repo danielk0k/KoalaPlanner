@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
 import { Avatar, Text, VStack, Stack, useToast } from "@chakra-ui/react";
 
@@ -7,6 +8,7 @@ export default function ProfilePicture() {
   const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
   const user = supabaseClient.auth.user();
+  const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
@@ -15,6 +17,11 @@ export default function ProfilePicture() {
 
   const getAvatarImage = async () => {
     try {
+      if (!user) {
+        navigate("/app", { replace: true });
+        throw new Error("No session found.");
+      }
+
       let {
         data: userData,
         error,

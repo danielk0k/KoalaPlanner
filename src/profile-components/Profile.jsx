@@ -13,6 +13,7 @@ import {
   StatGroup,
   StatNumber,
   StatLabel,
+  useToast,
 } from "@chakra-ui/react";
 
 function Profile() {
@@ -20,6 +21,8 @@ function Profile() {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [data, setData] = useState(null);
   const session = supabaseClient.auth.session();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     getProfile();
@@ -27,6 +30,11 @@ function Profile() {
 
   const getProfile = async () => {
     try {
+      if (!session) {
+        navigate("/app", { replace: true });
+        throw new Error("No session found.");
+      }
+
       let {
         data: userData,
         error,
@@ -61,9 +69,15 @@ function Profile() {
         setAvatarUrl(URL.createObjectURL(data));
       }
     } catch (error) {
+      toast({
+        title: "Error in retrieving user data.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
       console.log(error);
-      // supabaseClient.auth.signOut();
-      // navigate("/app", { replace: true });
     }
   };
 
