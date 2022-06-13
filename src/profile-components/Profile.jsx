@@ -113,9 +113,10 @@ function Profile() {
               <Heading size="md">View your achievements and statistics</Heading>
               <HStack spacing={8}>
                 <Avatar size="2xl" src={avatarUrl} />
-                <Heading size="lg">
-                  Welcome back <Heading>{username}</Heading>
-                </Heading>
+                <Stack>
+                  <Heading size="lg">Welcome back</Heading>
+                  <Heading>{username}</Heading>
+                </Stack>
               </HStack>
               <Heading size="lg">Task Breakdown</Heading>
               <StatGroup>
