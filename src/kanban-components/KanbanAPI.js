@@ -19,8 +19,11 @@ export default class KanbanAPI {
       (column) => column.id === destination.droppableId
     );
     const task = newData[srcColIndex].items.splice(source.index, 1)[0];
-    if (destination.droppableId === "completed") {
-      task.content.completed_on = new Date();
+    if (
+      destination.droppableId === "completed" &&
+      source.droppableId !== "completed"
+    ) {
+      task.content.completed_on = new Date().toISOString();
     }
     newData[destColIndex].items.splice(destination.index, 0, task);
     setData(newData);

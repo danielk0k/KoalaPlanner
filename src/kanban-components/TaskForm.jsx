@@ -36,7 +36,7 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
       description: descriptionVal,
       due_date: dateValue,
       color: colorValue,
-      completed_on: "",
+      completed_on: selectValue !== "completed" ? "" : new Date().toISOString(),
     });
     setTitleValue("");
     setDescriptionVal("");

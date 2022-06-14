@@ -20,6 +20,7 @@ function TaskCardDialog({
   onOpen,
   onClose,
   task,
+  column,
   deleteTask,
   updateTask,
 }) {
@@ -56,14 +57,18 @@ function TaskCardDialog({
           </ModalBody>
           <ModalFooter>
             <ButtonGroup spacing={4}>
-              <Button
-                onClick={() => {
-                  onOpenEdit();
-                  onClose();
-                }}
-              >
-                Edit
-              </Button>
+              {column === "completed" ? (
+                <></>
+              ) : (
+                <Button
+                  onClick={() => {
+                    onOpenEdit();
+                    onClose();
+                  }}
+                >
+                  Edit
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   deleteTask(task.id);

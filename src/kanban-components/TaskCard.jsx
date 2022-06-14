@@ -3,7 +3,7 @@ import { Draggable } from "react-beautiful-dnd";
 import "./Shaking.css";
 import TaskCardDialog from "./TaskCardDialog";
 
-function TaskCard({ task, index, deleteTask, updateTask }) {
+function TaskCard({ task, column, index, deleteTask, updateTask }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -12,6 +12,7 @@ function TaskCard({ task, index, deleteTask, updateTask }) {
         onOpen={onOpen}
         onClose={onClose}
         task={task}
+        column={column}
         deleteTask={deleteTask}
         updateTask={updateTask}
       />
