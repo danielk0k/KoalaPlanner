@@ -20,6 +20,7 @@ function TaskCardDialog({
   onOpen,
   onClose,
   task,
+  column,
   deleteTask,
   updateTask,
 }) {
@@ -47,8 +48,8 @@ function TaskCardDialog({
           <ModalBody>
             <Stack spacing={4}>
               <Text>{task.content.description}</Text>
-              {task.content.date ? (
-                <Text>Due by {task.content.date}</Text>
+              {task.content.due_date ? (
+                <Text>Due by {task.content.due_date}</Text>
               ) : (
                 <></>
               )}
@@ -56,14 +57,18 @@ function TaskCardDialog({
           </ModalBody>
           <ModalFooter>
             <ButtonGroup spacing={4}>
-              <Button
-                onClick={() => {
-                  onOpenEdit();
-                  onClose();
-                }}
-              >
-                Edit
-              </Button>
+              {column === "completed" ? (
+                <></>
+              ) : (
+                <Button
+                  onClick={() => {
+                    onOpenEdit();
+                    onClose();
+                  }}
+                >
+                  Edit
+                </Button>
+              )}
               <Button
                 onClick={() => {
                   deleteTask(task.id);

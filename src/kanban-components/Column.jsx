@@ -39,6 +39,7 @@ function Column({ data, columnId, columnName, deleteTask, updateTask }) {
                 <TaskCard
                   key={task.id}
                   task={task}
+                  column={columnId}
                   index={index}
                   deleteTask={deleteTask}
                   updateTask={updateTask}

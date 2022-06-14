@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
 import { Avatar, Text, VStack, Stack, useToast } from "@chakra-ui/react";
 
@@ -7,14 +8,20 @@ export default function ProfilePicture() {
   const [avatarFilePath, setAvatarFilePath] = useState(null);
   const [uploading, setUploading] = useState(false);
   const user = supabaseClient.auth.user();
+  const navigate = useNavigate();
   const toast = useToast();
 
   useEffect(() => {
     getAvatarImage();
-  }, [avatarFilePath]);
+  }, [uploading]);
 
   const getAvatarImage = async () => {
     try {
+      if (!user) {
+        navigate("/app", { replace: true });
+        throw new Error("No session found.");
+      }
+
       let {
         data: userData,
         error,
@@ -71,7 +78,7 @@ export default function ProfilePicture() {
 
       const file = event.target.files[0];
       const fileExt = file.name.split(".").pop();
-      const fileName = `${Math.random()}.${fileExt}`;
+      const fileName = `${user.id}.${fileExt}`;
       const filePath = `${fileName}`;
 
       let { error } = await supabaseClient.storage
@@ -95,7 +102,6 @@ export default function ProfilePicture() {
       if (upsertError) {
         throw upsertError;
       }
-      setAvatarFilePath(filePath);
       toast({
         title: "Avatar successfully updated.",
         description: "Looking good!",

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext } from "react-beautiful-dnd";
+import { useNavigate } from "react-router-dom";
 import Column from "./Column";
 import TaskForm from "./TaskForm";
 import KanbanAPI from "./KanbanAPI.js";
@@ -12,12 +13,15 @@ import {
   Button,
   Skeleton,
   useDisclosure,
+  useToast,
 } from "@chakra-ui/react";
 
 function KanbanBoard() {
   const [data, setData] = useState(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const session = supabaseClient.auth.session();
+  const navigate = useNavigate();
+  const toast = useToast();
 
   useEffect(() => {
     getData();
@@ -25,6 +29,11 @@ function KanbanBoard() {
 
   const getData = async () => {
     try {
+      if (!session) {
+        navigate("/app", { replace: true });
+        throw new Error("No session found.");
+      }
+
       let { data, error, status } = await supabaseClient
         .from("profiles")
         .select("board_data")
@@ -54,8 +63,15 @@ function KanbanBoard() {
         setData(JSON.parse(data.board_data));
       }
     } catch (error) {
-      alert(error.message);
-      console.log(error.error_description || error.message);
+      toast({
+        title: "Error in retrieving board data.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
+      console.log(error.message);
     }
   };
 
@@ -77,8 +93,15 @@ function KanbanBoard() {
         throw error;
       }
     } catch (error) {
-      alert("Error in updating board data.");
-      console.log(error.error_description || error.message);
+      toast({
+        title: "Error in updating board data.",
+        description: error.message,
+        status: "error",
+        position: "top-right",
+        duration: 4000,
+        isClosable: true,
+      });
+      console.log(error.message);
     }
   };
 
@@ -143,6 +166,7 @@ function KanbanBoard() {
             <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
               {columnList.map((value) => (
                 <Column
+                  key={value.id}
                   data={data}
                   columnId={value.id}
                   columnName={value.title}
