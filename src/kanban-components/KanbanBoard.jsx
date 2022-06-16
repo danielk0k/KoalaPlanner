@@ -157,7 +157,15 @@ function KanbanBoard() {
         <Flex>
           <Heading size="2xl">Board</Heading>
           <Spacer />
-          <Button onClick={onOpen}>Create New Task</Button>
+          <Button
+            onClick={onOpen}
+            backgroundColor="#f8f9fe"
+            textColor="#34495E"
+            borderColor="#34495E"
+            borderWidth="1px"
+          >
+            Create New Task
+          </Button>
         </Flex>
         {data === null ? (
           <Skeleton height="50px" />
