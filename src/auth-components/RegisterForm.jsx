@@ -73,7 +73,7 @@ function RegisterForm() {
   };
 
   return (
-    <Flex minH={"100vh"} align={"center"} justify={"center"}>
+    <Flex align={"center"} justify={"center"}>
       <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
         <Stack align={"center"}>
           <Square size="60px" bg="#2C3E50" rounded={"lg"}>
