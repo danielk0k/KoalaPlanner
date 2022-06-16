@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
-import Column from "./Column";
-import TaskForm from "./TaskForm";
+import Column from "./board-parts/Column";
+import TaskForm from "./board-parts/TaskForm";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
