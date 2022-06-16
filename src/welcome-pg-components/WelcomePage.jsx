@@ -1,4 +1,5 @@
 import "./welcome.css";
+import { facts } from "./fun-facts/facts";
 import { useNavigate } from "react-router-dom";
 import {
   Flex,
@@ -8,7 +9,9 @@ import {
   Button,
   Heading,
   Text,
+  Link,
 } from "@chakra-ui/react";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 function WelcomePage() {
   const navigate = useNavigate();
@@ -18,6 +21,13 @@ function WelcomePage() {
     { left: "38rem", top: "30rem" },
     { left: "15rem", top: "36rem" },
   ];
+  const getFunFact = () => {
+    const randomInt = Math.floor(Math.random() * 3); // Returns a random integer from 0 to 2
+    const title = facts[randomInt].title[randomInt];
+    const description = facts[randomInt].description;
+    return [title, description];
+  };
+  const [title, description] = getFunFact();
   return (
     <>
       <Flex marginTop="5rem" padding="3rem">
@@ -33,11 +43,11 @@ function WelcomePage() {
               </Heading>
             </Stack>
             <Text width={{ base: "100%", md: "50%" }}>
-              Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ipsa
-              modi aspernatur quam est atque id alias accusantium quo
-              voluptates. Error necessitatibus iusto rem velit nesciunt tempora
-              dolores ratione blanditiis harum?
-              <strong> This will be replaced with the fact of the day.</strong>
+              <strong>{title}</strong> {description}{" "}
+              <Link href="https://en.wikipedia.org/wiki/Koala" isExternal>
+                Wikipedia source
+                <ExternalLinkIcon mx="2px" />
+              </Link>
             </Text>
             <Button
               onClick={() => navigate("/app", { replace: true })}
@@ -63,8 +73,8 @@ function WelcomePage() {
           lg: "visible",
         }}
       >
-        {positions.map((value) => (
-          <div className="paw-print-1" style={value}>
+        {positions.map((value, index) => (
+          <div key={index} className="paw-print-1" style={value}>
             <div className="pad large"></div>
             <div className="pad small-1"></div>
             <div className="pad small-2"></div>
