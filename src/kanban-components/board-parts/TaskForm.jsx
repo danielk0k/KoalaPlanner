@@ -73,83 +73,83 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
       <ModalContent>
         <ModalHeader>{task ? "Edit Task" : "Create New Task"}</ModalHeader>
         <ModalCloseButton />
-        <ModalBody>
-          <Stack spacing={4}>
-            {task ? (
-              <></>
-            ) : (
+        <form onSubmit={task ? handleUpdateTask : handleNewTask}>
+          <ModalBody>
+            <Stack spacing={4}>
+              {task ? (
+                <></>
+              ) : (
+                <FormControl isRequired>
+                  <FormLabel>Category</FormLabel>
+                  <Select
+                    placeholder="Select option"
+                    onChange={(event) => setSelectValue(event.target.value)}
+                    isRequired
+                  >
+                    <option value="to_do">To Do</option>
+                    <option value="in_progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </Select>
+                </FormControl>
+              )}
               <FormControl isRequired>
-                <FormLabel>Category</FormLabel>
-                <Select
-                  placeholder="Select option"
-                  onChange={(event) => setSelectValue(event.target.value)}
-                  isRequired
-                >
-                  <option value="to_do">To Do</option>
-                  <option value="in_progress">In Progress</option>
-                  <option value="completed">Completed</option>
-                </Select>
+                <FormLabel>Title</FormLabel>
+                <Input
+                  type="text"
+                  placeholder="Enter a title"
+                  value={titleValue}
+                  onChange={(event) => setTitleValue(event.target.value)}
+                />
               </FormControl>
-            )}
-            <FormControl isRequired>
-              <FormLabel>Title</FormLabel>
-              <Input
-                type="text"
-                placeholder="Enter a title"
-                value={titleValue}
-                onChange={(event) => setTitleValue(event.target.value)}
-              />
-            </FormControl>
-            <FormControl isRequired>
-              <FormLabel>Description</FormLabel>
-              <Input
-                type="text"
-                placeholder="Enter a description"
-                value={descriptionVal}
-                onChange={(event) => setDescriptionVal(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Due by</FormLabel>
-              <Input
-                type="date"
-                value={dateValue}
-                onChange={(event) => setDateValue(event.target.value)}
-              />
-            </FormControl>
-            <FormControl>
-              <FormLabel>Tag colour</FormLabel>
-              <Container overflow="scroll" padding={2}>
-                <ButtonGroup
-                  spacing={4}
-                  variant="solid"
-                  onClick={(event) => setColorValue(event.target.value)}
-                >
-                  {colors.map((value) => (
-                    <Button
-                      key={value}
-                      borderRadius={50}
-                      backgroundColor={value}
-                      value={value}
-                      borderWidth={3}
-                      borderColor={
-                        value === colorValue ? "gray.300" : "transparent"
-                      }
-                    ></Button>
-                  ))}
-                </ButtonGroup>
-              </Container>
-            </FormControl>
-          </Stack>
-        </ModalBody>
-        <ModalFooter>
-          <ButtonGroup spacing={4}>
-            <Button onClick={task ? handleUpdateTask : handleNewTask}>
-              Save
-            </Button>
-            <Button onClick={onClose}>Close</Button>
-          </ButtonGroup>
-        </ModalFooter>
+              <FormControl isRequired>
+                <FormLabel>Description</FormLabel>
+                <Input
+                  type="text"
+                  placeholder="Enter a description"
+                  value={descriptionVal}
+                  onChange={(event) => setDescriptionVal(event.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Due by</FormLabel>
+                <Input
+                  type="date"
+                  value={dateValue}
+                  onChange={(event) => setDateValue(event.target.value)}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Tag colour</FormLabel>
+                <Container overflow="scroll" padding={2}>
+                  <ButtonGroup
+                    spacing={4}
+                    variant="solid"
+                    onClick={(event) => setColorValue(event.target.value)}
+                  >
+                    {colors.map((value) => (
+                      <Button
+                        key={value}
+                        borderRadius={50}
+                        backgroundColor={value}
+                        value={value}
+                        borderWidth={3}
+                        borderColor={
+                          value === colorValue ? "gray.300" : "transparent"
+                        }
+                      ></Button>
+                    ))}
+                  </ButtonGroup>
+                </Container>
+              </FormControl>
+            </Stack>
+          </ModalBody>
+          <ModalFooter>
+            <ButtonGroup spacing={4}>
+              <Button type="submit">Save</Button>
+              <Button onClick={onClose}>Close</Button>
+            </ButtonGroup>
+          </ModalFooter>
+        </form>
       </ModalContent>
     </Modal>
   );
