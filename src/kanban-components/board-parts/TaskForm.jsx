@@ -30,7 +30,8 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     task ? task.content.color : "#f1c40f"
   );
 
-  const handleNewTask = () => {
+  const handleNewTask = (event) => {
+    event.preventDefault();
     newTask(selectValue, {
       title: titleValue,
       description: descriptionVal,
@@ -45,7 +46,8 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     onClose();
   };
 
-  const handleUpdateTask = () => {
+  const handleUpdateTask = (event) => {
+    event.preventDefault();
     updateTask(task.id, {
       title: titleValue,
       description: descriptionVal,
