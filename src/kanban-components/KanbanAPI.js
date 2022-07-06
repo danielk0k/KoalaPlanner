@@ -10,6 +10,16 @@ export default class KanbanAPI {
     return newData;
   }
 
+  static insertNewColumn(data, setData, columnId) {
+    const newData = [...data];
+    newData.push({
+      id: columnId,
+      items: [],
+    });
+    setData(newData);
+    return newData;
+  }
+
   static moveTask(data, setData, destination, source) {
     const newData = [...data];
     const srcColIndex = newData.findIndex(
@@ -59,6 +69,16 @@ export default class KanbanAPI {
         column.items.splice(taskIndex, 1);
         break;
       }
+    }
+    setData(newData);
+    return newData;
+  }
+
+  static deleteColumn(data, setData, columnId) {
+    const newData = [...data];
+    const colIndex = newData.findIndex((column) => column.id === columnId);
+    if (colIndex !== -1) {
+      newData.splice(colIndex, 1);
     }
     setData(newData);
     return newData;

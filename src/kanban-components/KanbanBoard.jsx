@@ -3,7 +3,6 @@ import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import Column from "./board-parts/Column";
-import TaskForm from "./board-parts/TaskForm";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
@@ -12,14 +11,12 @@ import {
   Stack,
   Button,
   Skeleton,
-  useDisclosure,
   useToast,
 } from "@chakra-ui/react";
 
 function KanbanBoard() {
   const [data, setData] = useState(null);
   const [isMobile, setIsMobile] = useState(false);
-  const { isOpen, onOpen, onClose } = useDisclosure();
   const session = supabaseClient.auth.session();
   const navigate = useNavigate();
   const toast = useToast();
@@ -44,22 +41,9 @@ function KanbanBoard() {
         throw error;
       }
 
-      if (data.board_data.length === 0) {
+      if (!data.board_data) {
         // Default data
-        setData([
-          {
-            id: "to_do",
-            items: [],
-          },
-          {
-            id: "in_progress",
-            items: [],
-          },
-          {
-            id: "completed",
-            items: [],
-          },
-        ]);
+        setData([]);
       } else {
         setData(JSON.parse(data.board_data));
       }
@@ -135,8 +119,18 @@ function KanbanBoard() {
     saveData(KanbanAPI.insertTask(data, setData, columnId, newContent));
   };
 
+  const handleNewColumn = (columnId) => {
+    saveData(KanbanAPI.insertNewColumn(data, setData, columnId));
+  };
+
   const handleDeleteTask = (taskId) => {
     saveData(KanbanAPI.deleteTask(data, setData, taskId));
+  };
+
+  const handleDeleteColumn = (columnId) => {
+    if (window.confirm(`Do you really want to delete ${columnId}?`)) {
+      saveData(KanbanAPI.deleteColumn(data, setData, columnId));
+    }
   };
 
   const handleUpdateTask = (taskId, newContent) => {
@@ -147,59 +141,52 @@ function KanbanBoard() {
   mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
   return (
-    <>
-      <TaskForm
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        newTask={handleNewTask}
-      />
-      <Stack spacing={8}>
-        <Flex>
-          <Heading size="2xl">Board</Heading>
-          <Spacer />
-          <Button
-            onClick={onOpen}
-            backgroundColor="#f8f9fe"
-            textColor="#34495E"
-            borderColor="#34495E"
-            borderWidth="1px"
+    <Stack spacing={8}>
+      <Flex>
+        <Heading size="2xl">Board</Heading>
+        <Spacer />
+        <Button
+          onClick={() => handleNewColumn(prompt("Enter a column name"))}
+          backgroundColor="#f8f9fe"
+          textColor="#34495E"
+          borderColor="#34495E"
+          borderWidth="1px"
+        >
+          Create New Column
+        </Button>
+      </Flex>
+      {data === null ? (
+        <Skeleton height="50px" />
+      ) : (
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Droppable
+            direction={isMobile ? "vertical" : "horizontal"}
+            type="column"
+            droppableId="all_columns"
           >
-            Create New Task
-          </Button>
-        </Flex>
-        {data === null ? (
-          <Skeleton height="50px" />
-        ) : (
-          <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Droppable
-              direction={isMobile ? "vertical" : "horizontal"}
-              type="column"
-              droppableId="all_columns"
-            >
-              {(provided) => (
-                <div ref={provided.innerRef} {...provided.droppableProps}>
-                  <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
-                    {data.map((value, index) => (
-                      <Column
-                        key={value.id}
-                        data={data}
-                        columnId={value.id}
-                        columnName={value.id}
-                        index={index}
-                        deleteTask={handleDeleteTask}
-                        updateTask={handleUpdateTask}
-                      />
-                    ))}
-                    {provided.placeholder}
-                  </Stack>
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext>
-        )}
-      </Stack>
-    </>
+            {(provided) => (
+              <div ref={provided.innerRef} {...provided.droppableProps}>
+                <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
+                  {data.map((value, index) => (
+                    <Column
+                      key={value.id}
+                      data={data}
+                      columnId={value.id}
+                      index={index}
+                      newTask={handleNewTask}
+                      deleteTask={handleDeleteTask}
+                      updateTask={handleUpdateTask}
+                      deleteColumn={handleDeleteColumn}
+                    />
+                  ))}
+                  {provided.placeholder}
+                </Stack>
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      )}
+    </Stack>
   );
 }
 

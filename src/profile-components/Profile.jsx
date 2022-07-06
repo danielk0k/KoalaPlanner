@@ -50,11 +50,7 @@ function Profile() {
 
       if (userData) {
         setUsername(userData.username);
-        setData(
-          userData.board_data.length === 0
-            ? userData.board_data
-            : JSON.parse(userData.board_data)
-        );
+        setData(userData.board_data ? JSON.parse(userData.board_data) : []);
       }
 
       if (userData.avatar_url) {
