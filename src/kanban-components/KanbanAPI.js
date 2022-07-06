@@ -30,6 +30,14 @@ export default class KanbanAPI {
     return newData;
   }
 
+  static moveColumn(data, setData, destination, source) {
+    const newData = [...data];
+    const column = newData.splice(source.index, 1)[0];
+    newData.splice(destination.index, 0, column);
+    setData(newData);
+    return newData;
+  }
+
   static updateTask(data, setData, taskId, newContent) {
     const newData = [...data];
     for (const column of newData) {

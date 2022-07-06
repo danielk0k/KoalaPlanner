@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import Column from "./board-parts/Column";
 import TaskForm from "./board-parts/TaskForm";
@@ -18,6 +18,7 @@ import {
 
 function KanbanBoard() {
   const [data, setData] = useState(null);
+  const [isMobile, setIsMobile] = useState(false);
   const { isOpen, onOpen, onClose } = useDisclosure();
   const session = supabaseClient.auth.session();
   const navigate = useNavigate();
@@ -114,7 +115,7 @@ function KanbanBoard() {
         }
         draggableId => taskId
     */
-    const { destination, source } = result;
+    const { destination, source, type } = result;
 
     if (
       !destination ||
@@ -123,8 +124,11 @@ function KanbanBoard() {
     ) {
       return; // Do nothing
     }
-
-    saveData(KanbanAPI.moveTask(data, setData, destination, source));
+    if (type === "column") {
+      saveData(KanbanAPI.moveColumn(data, setData, destination, source));
+    } else {
+      saveData(KanbanAPI.moveTask(data, setData, destination, source));
+    }
   };
 
   const handleNewTask = (columnId, newContent) => {
@@ -139,11 +143,8 @@ function KanbanBoard() {
     saveData(KanbanAPI.updateTask(data, setData, taskId, newContent));
   };
 
-  const columnList = [
-    { id: "to_do", title: "To Do" },
-    { id: "in_progress", title: "In Progress" },
-    { id: "completed", title: "Completed" },
-  ];
+  const mobileView = window.matchMedia("(max-width: 62em)");
+  mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
   return (
     <>
@@ -171,18 +172,30 @@ function KanbanBoard() {
           <Skeleton height="50px" />
         ) : (
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
-              {columnList.map((value) => (
-                <Column
-                  key={value.id}
-                  data={data}
-                  columnId={value.id}
-                  columnName={value.title}
-                  deleteTask={handleDeleteTask}
-                  updateTask={handleUpdateTask}
-                />
-              ))}
-            </Stack>
+            <Droppable
+              direction={isMobile ? "vertical" : "horizontal"}
+              type="column"
+              droppableId="all_columns"
+            >
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
+                    {data.map((value, index) => (
+                      <Column
+                        key={value.id}
+                        data={data}
+                        columnId={value.id}
+                        columnName={value.id}
+                        index={index}
+                        deleteTask={handleDeleteTask}
+                        updateTask={handleUpdateTask}
+                      />
+                    ))}
+                    {provided.placeholder}
+                  </Stack>
+                </div>
+              )}
+            </Droppable>
           </DragDropContext>
         )}
       </Stack>
