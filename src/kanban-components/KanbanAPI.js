@@ -29,12 +29,6 @@ export default class KanbanAPI {
       (column) => column.id === destination.droppableId
     );
     const task = newData[srcColIndex].items.splice(source.index, 1)[0];
-    if (
-      destination.droppableId === "completed" &&
-      source.droppableId !== "completed"
-    ) {
-      task.content.completed_on = new Date().toISOString();
-    }
     newData[destColIndex].items.splice(destination.index, 0, task);
     setData(newData);
     return newData;
@@ -54,6 +48,20 @@ export default class KanbanAPI {
       const taskIndex = column.items.findIndex((task) => task.id === taskId);
       if (taskIndex !== -1) {
         column.items[taskIndex].content = newContent;
+        break;
+      }
+    }
+    setData(newData);
+    return newData;
+  }
+
+  static completedTask(data, setData, taskId) {
+    const newData = [...data];
+    for (const column of newData) {
+      const taskIndex = column.items.findIndex((task) => task.id === taskId);
+      if (taskIndex !== -1) {
+        column.items[taskIndex].content.completed_on = new Date().toISOString();
+        newData[0].items.push(column.items.splice(taskIndex, 1)[0]);
         break;
       }
     }

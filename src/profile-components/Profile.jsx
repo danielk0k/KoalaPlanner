@@ -80,7 +80,8 @@ function Profile() {
   const isInThisWeek = (date) => {
     const taskDate = new Date(date);
     const current = new Date();
-    const weekstart = current.getDate() - current.getDay() + 1;
+    const weekstart =
+      current.getDate() - (current.getDay() === 0 ? 7 : current.getDay()) + 1;
     const weekend = weekstart + 6;
     if (
       taskDate.getFullYear() === current.getFullYear() &&
@@ -157,15 +158,13 @@ function Profile() {
                   <StatNumber fontSize="4xl">
                     {data === null || data.length === 0
                       ? 0
-                      : data
-                          .find((column) => column.id === "completed")
-                          .items.reduce((total, task) => {
-                            if (isInThisWeek(task.content.completed_on)) {
-                              return total + 1;
-                            } else {
-                              return total;
-                            }
-                          }, 0)}
+                      : data[0].items.reduce((total, task) => {
+                          if (isInThisWeek(task.content.completed_on)) {
+                            return total + 1;
+                          } else {
+                            return total;
+                          }
+                        }, 0)}
                   </StatNumber>
                   <StatLabel fontSize="lg">Completed This Week</StatLabel>
                 </Stat>

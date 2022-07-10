@@ -43,7 +43,12 @@ function KanbanBoard() {
 
       if (!data.board_data) {
         // Default data
-        setData([]);
+        setData([
+          {
+            id: "completed",
+            items: [],
+          },
+        ]);
       } else {
         setData(JSON.parse(data.board_data));
       }
@@ -120,7 +125,9 @@ function KanbanBoard() {
   };
 
   const handleNewColumn = (columnId) => {
-    saveData(KanbanAPI.insertNewColumn(data, setData, columnId));
+    if (columnId) {
+      saveData(KanbanAPI.insertNewColumn(data, setData, columnId));
+    }
   };
 
   const handleDeleteTask = (taskId) => {
@@ -137,6 +144,10 @@ function KanbanBoard() {
     saveData(KanbanAPI.updateTask(data, setData, taskId, newContent));
   };
 
+  const handleCompletedTask = (taskId) => {
+    saveData(KanbanAPI.completedTask(data, setData, taskId));
+  };
+
   const mobileView = window.matchMedia("(max-width: 62em)");
   mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
@@ -146,7 +157,7 @@ function KanbanBoard() {
         <Heading size="2xl">Board</Heading>
         <Spacer />
         <Button
-          onClick={() => handleNewColumn(prompt("Enter a column name"))}
+          onClick={() => handleNewColumn(prompt("Enter a column name:"))}
           backgroundColor="#f8f9fe"
           textColor="#34495E"
           borderColor="#34495E"
@@ -167,18 +178,23 @@ function KanbanBoard() {
             {(provided) => (
               <div ref={provided.innerRef} {...provided.droppableProps}>
                 <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
-                  {data.map((value, index) => (
-                    <Column
-                      key={value.id}
-                      data={data}
-                      columnId={value.id}
-                      index={index}
-                      newTask={handleNewTask}
-                      deleteTask={handleDeleteTask}
-                      updateTask={handleUpdateTask}
-                      deleteColumn={handleDeleteColumn}
-                    />
-                  ))}
+                  {data.map((value, index) =>
+                    value.id === "completed" ? (
+                      <></>
+                    ) : (
+                      <Column
+                        key={value.id}
+                        data={data}
+                        columnId={value.id}
+                        index={index}
+                        newTask={handleNewTask}
+                        deleteTask={handleDeleteTask}
+                        updateTask={handleUpdateTask}
+                        completedTask={handleCompletedTask}
+                        deleteColumn={handleDeleteColumn}
+                      />
+                    )
+                  )}
                   {provided.placeholder}
                 </Stack>
               </div>

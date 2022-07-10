@@ -21,6 +21,7 @@ function Column({
   newTask,
   deleteTask,
   updateTask,
+  completedTask,
   deleteColumn,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -57,10 +58,11 @@ function Column({
                   </HStack>
                   <Spacer />
                   <HStack spacing={4}>
-                    <AddIcon boxSize={4} onClick={onOpen} />
+                    <AddIcon boxSize={4} onClick={onOpen} cursor="pointer" />
                     <CloseIcon
                       boxSize={4}
                       onClick={() => deleteColumn(columnId)}
+                      cursor="pointer"
                     />
                   </HStack>
                 </Flex>
@@ -77,6 +79,7 @@ function Column({
                           index={index}
                           deleteTask={deleteTask}
                           updateTask={updateTask}
+                          completedTask={completedTask}
                         />
                       ))}
                       {provided.placeholder}

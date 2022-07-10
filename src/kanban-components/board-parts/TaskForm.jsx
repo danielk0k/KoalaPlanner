@@ -139,8 +139,12 @@ function TaskForm({
           </ModalBody>
           <ModalFooter>
             <ButtonGroup spacing={4}>
-              <Button type="submit">Save</Button>
-              <Button onClick={onClose}>Close</Button>
+              <Button type="submit" variant="outline">
+                Save
+              </Button>
+              <Button onClick={onClose} variant="outline">
+                Close
+              </Button>
             </ButtonGroup>
           </ModalFooter>
         </form>

@@ -13,6 +13,7 @@ import {
   ButtonGroup,
   useDisclosure,
 } from "@chakra-ui/react";
+import { CheckIcon, EditIcon, DeleteIcon } from "@chakra-ui/icons";
 import TaskForm from "./TaskForm";
 
 function TaskCardDialog({
@@ -23,6 +24,7 @@ function TaskCardDialog({
   column,
   deleteTask,
   updateTask,
+  completedTask,
 }) {
   const {
     isOpen: isOpenEdit,
@@ -57,25 +59,32 @@ function TaskCardDialog({
           </ModalBody>
           <ModalFooter>
             <ButtonGroup spacing={4}>
-              {column === "completed" ? (
-                <></>
-              ) : (
-                <Button
-                  onClick={() => {
-                    onOpenEdit();
-                    onClose();
-                  }}
-                >
-                  Edit
-                </Button>
-              )}
               <Button
+                leftIcon={<EditIcon />}
+                colorScheme="blue"
+                onClick={() => {
+                  onOpenEdit();
+                  onClose();
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                leftIcon={<DeleteIcon />}
+                colorScheme="red"
                 onClick={() => {
                   deleteTask(task.id);
                   onClose();
                 }}
               >
                 Delete
+              </Button>
+              <Button
+                leftIcon={<CheckIcon />}
+                colorScheme="green"
+                onClick={() => completedTask(task.id)}
+              >
+                Completed
               </Button>
             </ButtonGroup>
           </ModalFooter>
