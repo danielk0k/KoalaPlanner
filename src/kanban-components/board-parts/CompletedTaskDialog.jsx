@@ -11,10 +11,23 @@ import {
   Text,
   Box,
   Stack,
+  ButtonGroup,
 } from "@chakra-ui/react";
 
-function CompletedTaskDialog({ isOpen, onOpen, onClose, completedTasks }) {
+function CompletedTaskDialog({
+  isOpen,
+  onOpen,
+  onClose,
+  completedTasks,
+  clearTask,
+}) {
   const btnRef = React.useRef();
+  const clearAllTask = () => {
+    if (window.confirm("Are you sure you want to clear all completed tasks?")) {
+      clearTask();
+      onClose();
+    }
+  };
 
   return (
     <Drawer
@@ -46,9 +59,14 @@ function CompletedTaskDialog({ isOpen, onOpen, onClose, completedTasks }) {
           </Stack>
         </DrawerBody>
         <DrawerFooter>
-          <Button variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+          <ButtonGroup spacing={4}>
+            <Button variant="outline" colorScheme="red" onClick={clearAllTask}>
+              Clear All
+            </Button>
+            <Button variant="outline" onClick={onClose}>
+              Cancel
+            </Button>
+          </ButtonGroup>
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

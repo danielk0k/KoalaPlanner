@@ -166,6 +166,12 @@ function KanbanBoard() {
     saveData(KanbanAPI.completedTask(data, setData, taskId));
   };
 
+  const handleClearCompletedTask = () => {
+    data[0].items = [];
+    setData(data);
+    saveData(data);
+  };
+
   const mobileView = window.matchMedia("(max-width: 62em)");
   mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
@@ -182,6 +188,7 @@ function KanbanBoard() {
         onOpen={onOpenCompleted}
         onClose={onCloseCompleted}
         completedTasks={data === null ? [] : data[0].items}
+        clearTask={handleClearCompletedTask}
       />
       <Stack spacing={8}>
         <Flex>
