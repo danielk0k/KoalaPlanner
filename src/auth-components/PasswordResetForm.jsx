@@ -1,42 +1,46 @@
 import supabaseClient from "./supabaseClient";
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
+  Flex,
+  Box,
+  Square,
   FormControl,
   FormLabel,
-  FormHelperText,
+  FormErrorMessage,
   Input,
+  Stack,
   Button,
-  ButtonGroup,
+  Heading,
   Text,
   useToast,
 } from "@chakra-ui/react";
 
-function PasswordResetEmail({ isOpen, onOpen, onClose }) {
-  const user = supabaseClient.auth.user();
+function PasswordResetForm() {
   const [loading, setLoading] = useState(false);
-  const [email, setEmail] = useState(user ? user.email : "");
+  const [newPassword, setNewPassword] = useState("");
+  const [rePassword, setRePassword] = useState("");
+  const navigate = useNavigate();
   const toast = useToast();
+  const location = useLocation();
+  const access_token = location.state.token;
+  const isError = rePassword !== newPassword && rePassword !== "";
 
-  const handleResetPwd = async (event) => {
+  const handlePwdReset = async (event) => {
     event.preventDefault();
+
     try {
       setLoading(true);
-      const { error } = await supabaseClient.auth.api.resetPasswordForEmail(
-        email
-      );
+      const { error } = await supabaseClient.auth.api.updateUser(access_token, {
+        password: newPassword,
+      });
+
       if (error) {
         throw error;
       }
       toast({
-        title: "A password reset email has been sent.",
-        description: "Please check your inbox/ spam.",
+        title: "Password has been reset.",
+        description: "You may log in now.",
         status: "success",
         position: "top-right",
         duration: 4000,
@@ -44,8 +48,8 @@ function PasswordResetEmail({ isOpen, onOpen, onClose }) {
       });
     } catch (error) {
       toast({
-        title: "Please try again.",
-        description: error.message,
+        title: "Password could not be reset.",
+        description: "Please try again.",
         status: "error",
         position: "top-right",
         duration: 4000,
@@ -54,30 +58,53 @@ function PasswordResetEmail({ isOpen, onOpen, onClose }) {
       console.log(error.message);
     } finally {
       setLoading(false);
+      navigate("/app/signout", { replace: true });
     }
   };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Password Reset</ModalHeader>
-        <ModalCloseButton />
-        <form onSubmit={handleResetPwd}>
-          <ModalBody>
-            <FormControl isRequired>
-              <FormLabel>Email</FormLabel>
-              <Input
-                type="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
-              />
-              <FormHelperText>
-                An email will be sent to reset your password.
-              </FormHelperText>
-            </FormControl>
-          </ModalBody>
-          <ModalFooter>
-            <ButtonGroup spacing={4}>
+    <Flex align={"center"} justify={"center"}>
+      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+        <Stack align={"center"}>
+          <Square size="60px" bg="#2C3E50" rounded={"lg"}>
+            <Heading textColor="#FFFFFF">K</Heading>
+          </Square>
+          <Heading fontSize={"4xl"} textAlign={"center"}>
+            Password Reset
+          </Heading>
+        </Stack>
+        <Box
+          rounded={"lg"}
+          backgroundColor="#FFFFFF"
+          boxShadow={"lg"}
+          borderWidth={1}
+          p={8}
+        >
+          <form onSubmit={handlePwdReset}>
+            <Stack spacing={10}>
+              <Stack spacing={4}>
+                <FormControl isRequired>
+                  <FormLabel htmlFor="password">New Password</FormLabel>
+                  <Input
+                    type="password"
+                    onChange={(event) => setNewPassword(event.target.value)}
+                  />
+                </FormControl>
+                <FormControl isRequired isInvalid={isError}>
+                  <FormLabel htmlFor="password">Re-Enter Password</FormLabel>
+                  <Input
+                    type="password"
+                    onChange={(event) => setRePassword(event.target.value)}
+                  />
+                  {isError ? (
+                    <FormErrorMessage>
+                      New password does not match.
+                    </FormErrorMessage>
+                  ) : (
+                    <></>
+                  )}
+                </FormControl>
+              </Stack>
               <Button
                 type="submit"
                 isLoading={loading}
@@ -94,13 +121,12 @@ function PasswordResetEmail({ isOpen, onOpen, onClose }) {
               >
                 <Text>SUBMIT</Text>
               </Button>
-              <Button onClick={onClose}>Close</Button>
-            </ButtonGroup>
-          </ModalFooter>
-        </form>
-      </ModalContent>
-    </Modal>
+            </Stack>
+          </form>
+        </Box>
+      </Stack>
+    </Flex>
   );
 }
 
-export default PasswordResetEmail;
+export default PasswordResetForm;

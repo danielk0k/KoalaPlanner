@@ -1,14 +1,15 @@
 import { Navigate } from "react-router-dom";
 
-function HandleRedirect() {
+function RecoveryRedirect() {
   const urlString = window.location.href;
   const paramString = urlString.split("#");
   const queryString = new URLSearchParams(paramString[1]);
   if (queryString.has("type") && queryString.get("type") === "recovery") {
     return (
       <Navigate
-        to={`/recovery/${queryString.get("access_token")}`}
+        to="/recovery"
         replace={true}
+        state={{ token: queryString.get("access_token") }}
       />
     );
   } else {
@@ -16,4 +17,4 @@ function HandleRedirect() {
   }
 }
 
-export default HandleRedirect;
+export default RecoveryRedirect;
