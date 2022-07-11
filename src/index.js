@@ -6,6 +6,7 @@ import WelcomePage from "./welcome-pg-components/WelcomePage";
 import App from "./App";
 import RegisterForm from "./auth-components/RegisterForm";
 import LoginForm from "./auth-components/LoginForm";
+import PasswordResetForm from "./auth-components/PasswordResetForm";
 import Dashboard from "./profile-components/Dashboard";
 import Board from "./kanban-components/index";
 import Settings from "./settings-components/index";
@@ -23,6 +24,7 @@ root.render(
         <Route path="/app/board" element={<Board />}></Route>
         <Route path="/app/settings" element={<Settings />}></Route>
         <Route path="/app/signout" element={<App signout={true} />}></Route>
+        <Route path="/recovery" element={<PasswordResetForm />}></Route>
       </Routes>
     </BrowserRouter>
   </ChakraProvider>

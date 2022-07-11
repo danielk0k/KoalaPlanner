@@ -1,4 +1,5 @@
 import "./welcome.css";
+import RecoveryRedirect from "../RecoveryRedirect";
 import { facts } from "./fun-facts/facts";
 import { useNavigate } from "react-router-dom";
 import {
@@ -15,6 +16,11 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 function WelcomePage() {
   const navigate = useNavigate();
+  const isRedirect = () => {
+    const urlString = window.location.href;
+    const paramString = urlString.split("#");
+    return paramString.length > 1;
+  };
   const positions = [
     { left: "70rem", top: "3rem" },
     { left: "60rem", top: "20rem" },
@@ -28,7 +34,9 @@ function WelcomePage() {
     return [title, description];
   };
   const [title, description] = getFunFact();
-  return (
+  return isRedirect() ? (
+    <RecoveryRedirect />
+  ) : (
     <>
       <Flex marginTop="5rem" padding="3rem">
         <Stack spacing={10}>
