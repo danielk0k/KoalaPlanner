@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import supabaseClient from "../auth-components/supabaseClient";
 import Navbar from "../ui-components/Navbar";
+import TableView from "./TableView";
 import {
   Heading,
   Flex,
@@ -9,14 +10,16 @@ import {
   Box,
   Avatar,
   HStack,
-  Stat,
-  StatGroup,
-  StatNumber,
-  StatLabel,
   useToast,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Skeleton,
 } from "@chakra-ui/react";
 
-function Profile() {
+function Dashboard() {
   const [username, setUsername] = useState("");
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [data, setData] = useState(null);
@@ -93,6 +96,23 @@ function Profile() {
     }
   };
 
+  const dueThisWk = data
+    ? data.flatMap((column) => {
+        if (column.id === "completed") {
+          return [];
+        } else {
+          return column.items.filter((task) =>
+            isInThisWeek(task.content.due_date)
+          );
+        }
+      })
+    : [];
+
+  const completedThisWk =
+    data && data.length > 0
+      ? data[0].items.filter((task) => isInThisWeek(task.content.completed_on))
+      : [];
+
   return (
     <Navbar>
       <Stack spacing={8}>
@@ -115,60 +135,24 @@ function Profile() {
                   <Heading>{username}</Heading>
                 </Stack>
               </HStack>
-              <Heading size="lg">Task Breakdown</Heading>
-              <StatGroup>
-                <Stat textAlign="center">
-                  <StatNumber fontSize="4xl">
-                    {data === null || data.length === 0
-                      ? 0
-                      : data.reduce((total, column) => {
-                          if (column.id !== "completed") {
-                            return total + column.items.length;
-                          } else {
-                            return total;
-                          }
-                        }, 0)}
-                  </StatNumber>
-                  <StatLabel fontSize="lg">Currently Pending</StatLabel>
-                </Stat>
-                <Stat textAlign="center">
-                  <StatNumber fontSize="4xl">
-                    {data === null || data.length === 0
-                      ? 0
-                      : data.reduce((total, column) => {
-                          if (column.id !== "completed") {
-                            return (
-                              total +
-                              column.items.reduce((subtotal, task) => {
-                                if (isInThisWeek(task.content.due_date)) {
-                                  return subtotal + 1;
-                                } else {
-                                  return subtotal;
-                                }
-                              }, 0)
-                            );
-                          } else {
-                            return total;
-                          }
-                        }, 0)}
-                  </StatNumber>
-                  <StatLabel fontSize="lg">Due This Week</StatLabel>
-                </Stat>
-                <Stat textAlign="center">
-                  <StatNumber fontSize="4xl">
-                    {data === null || data.length === 0
-                      ? 0
-                      : data[0].items.reduce((total, task) => {
-                          if (isInThisWeek(task.content.completed_on)) {
-                            return total + 1;
-                          } else {
-                            return total;
-                          }
-                        }, 0)}
-                  </StatNumber>
-                  <StatLabel fontSize="lg">Completed This Week</StatLabel>
-                </Stat>
-              </StatGroup>
+              <Tabs>
+                <TabList>
+                  <Tab fontWeight="bold">Due This Week</Tab>
+                  <Tab fontWeight="bold">Completed This Week</Tab>
+                </TabList>
+                {data ? (
+                  <TabPanels>
+                    <TabPanel>
+                      <TableView tasks={dueThisWk} type="due" />
+                    </TabPanel>
+                    <TabPanel>
+                      <TableView tasks={completedThisWk} type="completed" />
+                    </TabPanel>
+                  </TabPanels>
+                ) : (
+                  <Skeleton height="40px" />
+                )}
+              </Tabs>
             </Stack>
           </Box>
         </Flex>
@@ -177,4 +161,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default Dashboard;
