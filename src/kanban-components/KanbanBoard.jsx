@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
@@ -194,7 +194,7 @@ function KanbanBoard() {
                   >
                     {data.map((value, index) =>
                       value.id === "completed" ? (
-                        <></>
+                        <React.Fragment key={value.id + index}></React.Fragment>
                       ) : (
                         <Column
                           key={value.id}
