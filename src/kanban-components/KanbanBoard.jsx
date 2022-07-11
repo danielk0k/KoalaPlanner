@@ -3,6 +3,7 @@ import supabaseClient from "../auth-components/supabaseClient";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import Column from "./board-parts/Column";
+import ColumnForm from "./board-parts/ColumnForm";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
@@ -12,6 +13,7 @@ import {
   Button,
   Skeleton,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 function KanbanBoard() {
@@ -20,6 +22,7 @@ function KanbanBoard() {
   const session = supabaseClient.auth.session();
   const navigate = useNavigate();
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     getData();
@@ -152,57 +155,69 @@ function KanbanBoard() {
   mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
   return (
-    <Stack spacing={8}>
-      <Flex>
-        <Heading size="2xl">Board</Heading>
-        <Spacer />
-        <Button
-          onClick={() => handleNewColumn(prompt("Enter a column name:"))}
-          backgroundColor="#f8f9fe"
-          textColor="#34495E"
-          borderColor="#34495E"
-          borderWidth="1px"
-        >
-          Create New Column
-        </Button>
-      </Flex>
-      {data === null ? (
-        <Skeleton height="50px" />
-      ) : (
-        <DragDropContext onDragEnd={handleOnDragEnd}>
-          <Droppable
-            direction={isMobile ? "vertical" : "horizontal"}
-            type="column"
-            droppableId="all_columns"
+    <>
+      <ColumnForm
+        isOpen={isOpen}
+        onOpen={onOpen}
+        onClose={onClose}
+        newColumn={handleNewColumn}
+      />
+      <Stack spacing={8}>
+        <Flex>
+          <Heading size="2xl">Board</Heading>
+          <Spacer />
+          <Button
+            onClick={onOpen}
+            backgroundColor="#f8f9fe"
+            textColor="#34495E"
+            borderColor="#34495E"
+            borderWidth="1px"
           >
-            {(provided) => (
-              <div ref={provided.innerRef} {...provided.droppableProps}>
-                <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
-                  {data.map((value, index) =>
-                    value.id === "completed" ? (
-                      <></>
-                    ) : (
-                      <Column
-                        key={value.id}
-                        data={data}
-                        columnId={value.id}
-                        index={index}
-                        newTask={handleNewTask}
-                        deleteTask={handleDeleteTask}
-                        updateTask={handleUpdateTask}
-                        completedTask={handleCompletedTask}
-                        deleteColumn={handleDeleteColumn}
-                      />
-                    )
-                  )}
-                  {provided.placeholder}
-                </Stack>
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
-      )}
-    </Stack>
+            Create New Column
+          </Button>
+        </Flex>
+        {data === null ? (
+          <Skeleton height="50px" />
+        ) : (
+          <DragDropContext onDragEnd={handleOnDragEnd}>
+            <Droppable
+              direction={isMobile ? "vertical" : "horizontal"}
+              type="column"
+              droppableId="all_columns"
+            >
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <Stack
+                    direction={{ base: "column", lg: "row" }}
+                    spacing={6}
+                    overflow="scroll"
+                  >
+                    {data.map((value, index) =>
+                      value.id === "completed" ? (
+                        <></>
+                      ) : (
+                        <Column
+                          key={value.id}
+                          data={data}
+                          columnId={value.id}
+                          index={index}
+                          newTask={handleNewTask}
+                          deleteTask={handleDeleteTask}
+                          updateTask={handleUpdateTask}
+                          completedTask={handleCompletedTask}
+                          deleteColumn={handleDeleteColumn}
+                        />
+                      )
+                    )}
+                    {provided.placeholder}
+                  </Stack>
+                </div>
+              )}
+            </Droppable>
+          </DragDropContext>
+        )}
+      </Stack>
+    </>
   );
 }
 
