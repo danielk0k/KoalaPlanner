@@ -1,4 +1,5 @@
 import supabaseClient from "./supabaseClient";
+import PasswordResetEmail from "./PasswordResetEmail";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
@@ -13,6 +14,7 @@ import {
   Heading,
   Text,
   useToast,
+  useDisclosure,
 } from "@chakra-ui/react";
 
 function LoginForm() {
@@ -20,6 +22,7 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
 
   const handleLogin = async (event) => {
@@ -60,71 +63,75 @@ function LoginForm() {
   };
 
   return (
-    <Flex align={"center"} justify={"center"}>
-      <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
-        <Stack align={"center"}>
-          <Square size="60px" bg="#2C3E50" rounded={"lg"}>
-            <Heading textColor="#FFFFFF">K</Heading>
-          </Square>
-          <Heading fontSize={"4xl"} textAlign={"center"}>
-            Sign in
-          </Heading>
-          <Text fontSize={"lg"} textColor="#808080">
-            to enjoy all of our cool features
-          </Text>
-        </Stack>
-        <Box
-          rounded={"lg"}
-          backgroundColor="#FFFFFF"
-          boxShadow={"lg"}
-          borderWidth={1}
-          p={8}
-        >
-          <form onSubmit={handleLogin}>
-            <Stack spacing={10}>
-              <Stack spacing={4}>
-                <FormControl isRequired>
-                  <FormLabel htmlFor="email">Email</FormLabel>
-                  <Input
-                    type="email"
-                    onChange={(event) => setEmail(event.target.value)}
-                  />
-                </FormControl>
-                <FormControl isRequired>
-                  <FormLabel htmlFor="password">Password</FormLabel>
-                  <Input
-                    type="password"
-                    onChange={(event) => setPassword(event.target.value)}
-                  />
-                </FormControl>
+    <>
+      <PasswordResetEmail isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+      <Flex align={"center"} justify={"center"}>
+        <Stack spacing={8} mx={"auto"} maxW={"lg"} py={12} px={6}>
+          <Stack align={"center"}>
+            <Square size="60px" bg="#2C3E50" rounded={"lg"}>
+              <Heading textColor="#FFFFFF">K</Heading>
+            </Square>
+            <Heading fontSize={"4xl"} textAlign={"center"}>
+              Sign in
+            </Heading>
+            <Text fontSize={"lg"} textColor="#808080">
+              to enjoy all of our cool features
+            </Text>
+          </Stack>
+          <Box
+            rounded={"lg"}
+            backgroundColor="#FFFFFF"
+            boxShadow={"lg"}
+            borderWidth={1}
+            p={8}
+          >
+            <form onSubmit={handleLogin}>
+              <Stack spacing={10}>
+                <Stack spacing={4}>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor="email">Email</FormLabel>
+                    <Input
+                      type="email"
+                      onChange={(event) => setEmail(event.target.value)}
+                    />
+                  </FormControl>
+                  <FormControl isRequired>
+                    <FormLabel htmlFor="password">Password</FormLabel>
+                    <Input
+                      type="password"
+                      onChange={(event) => setPassword(event.target.value)}
+                    />
+                  </FormControl>
+                </Stack>
+                <Button
+                  type="submit"
+                  isLoading={loading}
+                  loadingText="LOGGING IN"
+                  textColor="#FFFFFF"
+                  bgColor="#34495E"
+                  borderWidth="1px"
+                  _hover={{
+                    backgroundColor: "#FFFFFF",
+                    textColor: "#34495E",
+                    borderColor: "#34495E",
+                    borderWidth: "1px",
+                  }}
+                >
+                  <Text>LOGIN</Text>
+                </Button>
+                <Text textAlign={"center"}>
+                  Don't have an account?{" "}
+                  <Link to="/app/signup">
+                    <Text as="u">Sign Up</Text>
+                  </Link>
+                </Text>
               </Stack>
-              <Button
-                type="submit"
-                isLoading={loading}
-                loadingText="LOGGING IN"
-                textColor="#FFFFFF"
-                bgColor="#34495E"
-                borderWidth="1px"
-                _hover={{
-                  backgroundColor: "#FFFFFF",
-                  textColor: "#34495E",
-                  borderColor: "#34495E",
-                  borderWidth: "1px",
-                }}
-              >
-                <Text>LOGIN</Text>
-              </Button>
-              <Text textAlign={"center"}>
-                Don't have an account?{" "}
-                <Link to="/app/signup">
-                  <Text as="u">Sign Up</Text>
-                </Link>
-              </Text>
-            </Stack>
-          </form>
-        </Box>
-      </Stack>
-    </Flex>
+            </form>
+          </Box>
+          <Button onClick={onOpen}>Forget Password</Button>
+        </Stack>
+      </Flex>
+    </>
   );
 }
 
