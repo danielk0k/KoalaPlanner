@@ -1,27 +1,43 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import supabaseClient from "../auth-components/supabaseClient";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import Column from "./board-parts/Column";
-import TaskForm from "./board-parts/TaskForm";
+import ColumnForm from "./board-parts/ColumnForm";
+import CompletedTaskDialog from "./board-parts/CompletedTaskDialog";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
   Flex,
   Spacer,
   Stack,
-  Button,
+  IconButton,
   Skeleton,
-  useDisclosure,
   useToast,
+  useDisclosure,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+import { HamburgerIcon, AddIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 
 function KanbanBoard() {
   const [data, setData] = useState(null);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isMobile, setIsMobile] = useState(false);
   const session = supabaseClient.auth.session();
   const navigate = useNavigate();
   const toast = useToast();
+  const {
+    isOpen: isOpenColumn,
+    onOpen: onOpenColumn,
+    onClose: onCloseColumn,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenCompleted,
+    onOpen: onOpenCompleted,
+    onClose: onCloseCompleted,
+  } = useDisclosure();
 
   useEffect(() => {
     getData();
@@ -43,17 +59,9 @@ function KanbanBoard() {
         throw error;
       }
 
-      if (data.board_data.length === 0) {
+      if (!data.board_data) {
         // Default data
         setData([
-          {
-            id: "to_do",
-            items: [],
-          },
-          {
-            id: "in_progress",
-            items: [],
-          },
           {
             id: "completed",
             items: [],
@@ -114,7 +122,7 @@ function KanbanBoard() {
         }
         draggableId => taskId
     */
-    const { destination, source } = result;
+    const { destination, source, type } = result;
 
     if (
       !destination ||
@@ -123,66 +131,124 @@ function KanbanBoard() {
     ) {
       return; // Do nothing
     }
-
-    saveData(KanbanAPI.moveTask(data, setData, destination, source));
+    if (type === "column") {
+      saveData(KanbanAPI.moveColumn(data, setData, destination, source));
+    } else {
+      saveData(KanbanAPI.moveTask(data, setData, destination, source));
+    }
   };
 
   const handleNewTask = (columnId, newContent) => {
     saveData(KanbanAPI.insertTask(data, setData, columnId, newContent));
   };
 
+  const handleNewColumn = (columnId) => {
+    if (columnId) {
+      saveData(KanbanAPI.insertNewColumn(data, setData, columnId));
+    }
+  };
+
   const handleDeleteTask = (taskId) => {
     saveData(KanbanAPI.deleteTask(data, setData, taskId));
+  };
+
+  const handleDeleteColumn = (columnId) => {
+    if (window.confirm(`Do you really want to delete ${columnId}?`)) {
+      saveData(KanbanAPI.deleteColumn(data, setData, columnId));
+    }
   };
 
   const handleUpdateTask = (taskId, newContent) => {
     saveData(KanbanAPI.updateTask(data, setData, taskId, newContent));
   };
 
-  const columnList = [
-    { id: "to_do", title: "To Do" },
-    { id: "in_progress", title: "In Progress" },
-    { id: "completed", title: "Completed" },
-  ];
+  const handleCompletedTask = (taskId) => {
+    saveData(KanbanAPI.completedTask(data, setData, taskId));
+  };
+
+  const handleClearCompletedTask = () => {
+    data[0].items = [];
+    setData(data);
+    saveData(data);
+  };
+
+  const mobileView = window.matchMedia("(max-width: 62em)");
+  mobileView.addEventListener("change", (e) => setIsMobile(e.matches));
 
   return (
     <>
-      <TaskForm
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
-        newTask={handleNewTask}
+      <ColumnForm
+        isOpen={isOpenColumn}
+        onOpen={onOpenColumn}
+        onClose={onCloseColumn}
+        newColumn={handleNewColumn}
+      />
+      <CompletedTaskDialog
+        isOpen={isOpenCompleted}
+        onOpen={onOpenCompleted}
+        onClose={onCloseCompleted}
+        completedTasks={data === null ? [] : data[0].items}
+        clearTask={handleClearCompletedTask}
       />
       <Stack spacing={8}>
         <Flex>
           <Heading size="2xl">Board</Heading>
           <Spacer />
-          <Button
-            onClick={onOpen}
-            backgroundColor="#f8f9fe"
-            textColor="#34495E"
-            borderColor="#34495E"
-            borderWidth="1px"
-          >
-            Create New Task
-          </Button>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+            />
+            <MenuList>
+              <MenuItem icon={<AddIcon />} onClick={onOpenColumn}>
+                Create New Column
+              </MenuItem>
+              <MenuItem icon={<ExternalLinkIcon />} onClick={onOpenCompleted}>
+                Show Completed
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
         {data === null ? (
           <Skeleton height="50px" />
         ) : (
           <DragDropContext onDragEnd={handleOnDragEnd}>
-            <Stack direction={{ base: "column", lg: "row" }} spacing={6}>
-              {columnList.map((value) => (
-                <Column
-                  key={value.id}
-                  data={data}
-                  columnId={value.id}
-                  columnName={value.title}
-                  deleteTask={handleDeleteTask}
-                  updateTask={handleUpdateTask}
-                />
-              ))}
-            </Stack>
+            <Droppable
+              direction={isMobile ? "vertical" : "horizontal"}
+              type="column"
+              droppableId="all_columns"
+            >
+              {(provided) => (
+                <div ref={provided.innerRef} {...provided.droppableProps}>
+                  <Stack
+                    direction={{ base: "column", lg: "row" }}
+                    spacing={6}
+                    overflow="scroll"
+                  >
+                    {data.map((value, index) =>
+                      value.id === "completed" ? (
+                        <React.Fragment key={value.id + index}></React.Fragment>
+                      ) : (
+                        <Column
+                          key={value.id}
+                          data={data}
+                          columnId={value.id}
+                          index={index}
+                          newTask={handleNewTask}
+                          deleteTask={handleDeleteTask}
+                          updateTask={handleUpdateTask}
+                          completedTask={handleCompletedTask}
+                          deleteColumn={handleDeleteColumn}
+                        />
+                      )
+                    )}
+                    {provided.placeholder}
+                  </Stack>
+                </div>
+              )}
+            </Droppable>
           </DragDropContext>
         )}
       </Stack>

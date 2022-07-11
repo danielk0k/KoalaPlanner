@@ -9,7 +9,6 @@ import {
   ModalCloseButton,
   FormControl,
   FormLabel,
-  Select,
   Input,
   Button,
   Stack,
@@ -17,8 +16,15 @@ import {
   Container,
 } from "@chakra-ui/react";
 
-function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
-  const [selectValue, setSelectValue] = useState("to_do");
+function TaskForm({
+  isOpen,
+  onOpen,
+  onClose,
+  newTask,
+  updateTask,
+  task,
+  columnId,
+}) {
   const [titleValue, setTitleValue] = useState(task ? task.content.title : "");
   const [descriptionVal, setDescriptionVal] = useState(
     task ? task.content.description : ""
@@ -32,12 +38,12 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
 
   const handleNewTask = (event) => {
     event.preventDefault();
-    newTask(selectValue, {
+    newTask(columnId, {
       title: titleValue,
       description: descriptionVal,
       due_date: dateValue,
       color: colorValue,
-      completed_on: selectValue !== "completed" ? "" : new Date().toISOString(),
+      completed_on: columnId !== "completed" ? "" : new Date().toISOString(),
     });
     setTitleValue("");
     setDescriptionVal("");
@@ -73,27 +79,13 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
     <Modal isOpen={isOpen} onClose={onClose} size="lg">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>{task ? "Edit Task" : "Create New Task"}</ModalHeader>
+        <ModalHeader>
+          {task ? "Edit Task" : `Create New Task for ${columnId}`}
+        </ModalHeader>
         <ModalCloseButton />
         <form onSubmit={task ? handleUpdateTask : handleNewTask}>
           <ModalBody>
             <Stack spacing={4}>
-              {task ? (
-                <></>
-              ) : (
-                <FormControl isRequired>
-                  <FormLabel>Category</FormLabel>
-                  <Select
-                    placeholder="Select option"
-                    onChange={(event) => setSelectValue(event.target.value)}
-                    isRequired
-                  >
-                    <option value="to_do">To Do</option>
-                    <option value="in_progress">In Progress</option>
-                    <option value="completed">Completed</option>
-                  </Select>
-                </FormControl>
-              )}
               <FormControl isRequired>
                 <FormLabel>Title</FormLabel>
                 <Input
@@ -147,8 +139,12 @@ function TaskForm({ isOpen, onOpen, onClose, newTask, updateTask, task }) {
           </ModalBody>
           <ModalFooter>
             <ButtonGroup spacing={4}>
-              <Button type="submit">Save</Button>
-              <Button onClick={onClose}>Close</Button>
+              <Button type="submit" variant="outline">
+                Save
+              </Button>
+              <Button onClick={onClose} variant="outline">
+                Close
+              </Button>
             </ButtonGroup>
           </ModalFooter>
         </form>
