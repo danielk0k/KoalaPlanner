@@ -211,9 +211,7 @@ function KanbanBoard() {
             </MenuList>
           </Menu>
         </Flex>
-        {data === null ? (
-          <Skeleton height="50px" />
-        ) : (
+        {data ? (
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable
               direction={isMobile ? "vertical" : "horizontal"}
@@ -250,6 +248,8 @@ function KanbanBoard() {
               )}
             </Droppable>
           </DragDropContext>
+        ) : (
+          <Skeleton height="40px" />
         )}
       </Stack>
     </>
