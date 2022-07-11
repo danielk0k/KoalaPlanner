@@ -4,17 +4,23 @@ import { DragDropContext, Droppable } from "react-beautiful-dnd";
 import { useNavigate } from "react-router-dom";
 import Column from "./board-parts/Column";
 import ColumnForm from "./board-parts/ColumnForm";
+import CompletedTaskDialog from "./board-parts/CompletedTaskDialog";
 import KanbanAPI from "./KanbanAPI.js";
 import {
   Heading,
   Flex,
   Spacer,
   Stack,
-  Button,
+  IconButton,
   Skeleton,
   useToast,
   useDisclosure,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
 } from "@chakra-ui/react";
+import { HamburgerIcon, AddIcon, ExternalLinkIcon } from "@chakra-ui/icons";
 
 function KanbanBoard() {
   const [data, setData] = useState(null);
@@ -22,7 +28,16 @@ function KanbanBoard() {
   const session = supabaseClient.auth.session();
   const navigate = useNavigate();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpenColumn,
+    onOpen: onOpenColumn,
+    onClose: onCloseColumn,
+  } = useDisclosure();
+  const {
+    isOpen: isOpenCompleted,
+    onOpen: onOpenCompleted,
+    onClose: onCloseCompleted,
+  } = useDisclosure();
 
   useEffect(() => {
     getData();
@@ -157,24 +172,37 @@ function KanbanBoard() {
   return (
     <>
       <ColumnForm
-        isOpen={isOpen}
-        onOpen={onOpen}
-        onClose={onClose}
+        isOpen={isOpenColumn}
+        onOpen={onOpenColumn}
+        onClose={onCloseColumn}
         newColumn={handleNewColumn}
+      />
+      <CompletedTaskDialog
+        isOpen={isOpenCompleted}
+        onOpen={onOpenCompleted}
+        onClose={onCloseCompleted}
+        completedTasks={data === null ? [] : data[0].items}
       />
       <Stack spacing={8}>
         <Flex>
           <Heading size="2xl">Board</Heading>
           <Spacer />
-          <Button
-            onClick={onOpen}
-            backgroundColor="#f8f9fe"
-            textColor="#34495E"
-            borderColor="#34495E"
-            borderWidth="1px"
-          >
-            Create New Column
-          </Button>
+          <Menu>
+            <MenuButton
+              as={IconButton}
+              aria-label="Options"
+              icon={<HamburgerIcon />}
+              variant="outline"
+            />
+            <MenuList>
+              <MenuItem icon={<AddIcon />} onClick={onOpenColumn}>
+                Create New Column
+              </MenuItem>
+              <MenuItem icon={<ExternalLinkIcon />} onClick={onOpenCompleted}>
+                Show Completed
+              </MenuItem>
+            </MenuList>
+          </Menu>
         </Flex>
         {data === null ? (
           <Skeleton height="50px" />

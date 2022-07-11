@@ -61,7 +61,7 @@ export default class KanbanAPI {
       const taskIndex = column.items.findIndex((task) => task.id === taskId);
       if (taskIndex !== -1) {
         column.items[taskIndex].content.completed_on = new Date().toISOString();
-        newData[0].items.push(column.items.splice(taskIndex, 1)[0]);
+        newData[0].items.splice(0, 0, column.items.splice(taskIndex, 1)[0]);
         break;
       }
     }
