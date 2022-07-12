@@ -19,7 +19,6 @@ function RegisterForm() {
   const [loading, setLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
   const navigate = useNavigate();
   const toast = useToast();
 
@@ -40,7 +39,11 @@ function RegisterForm() {
       const { error: upsertError } = await supabaseClient
         .from("profiles")
         .upsert(
-          { id: user.id, username: name, updated_at: new Date() },
+          {
+            id: user.id,
+            username: `User #${user.id.substring(0, 7)}`,
+            updated_at: new Date(),
+          },
           { returning: "minimal" } // Don't return the value after inserting
         );
 
@@ -50,7 +53,7 @@ function RegisterForm() {
 
       toast({
         title: "Successful sign up.",
-        description: `Welcome ${name}!`,
+        description: `Welcome to your Koala Planner!`,
         status: "success",
         position: "top-right",
         duration: 4000,
@@ -96,14 +99,6 @@ function RegisterForm() {
           <form onSubmit={handleRegister}>
             <Stack spacing={10}>
               <Stack spacing={4}>
-                <FormControl isRequired>
-                  <FormLabel htmlFor="username">Username</FormLabel>
-                  <Input
-                    id="username"
-                    type="text"
-                    onChange={(event) => setName(event.target.value)}
-                  />
-                </FormControl>
                 <FormControl isRequired>
                   <FormLabel htmlFor="email">Email</FormLabel>
                   <Input

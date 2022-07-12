@@ -15,6 +15,7 @@ import {
   Text,
   useToast,
   useDisclosure,
+  FormHelperText,
 } from "@chakra-ui/react";
 
 function LoginForm() {
@@ -101,6 +102,9 @@ function LoginForm() {
                       type="password"
                       onChange={(event) => setPassword(event.target.value)}
                     />
+                    <FormHelperText onClick={onOpen} cursor="pointer">
+                      <Text as="u">Forgot your password?</Text>
+                    </FormHelperText>
                   </FormControl>
                 </Stack>
                 <Button
@@ -128,7 +132,6 @@ function LoginForm() {
               </Stack>
             </form>
           </Box>
-          <Button onClick={onOpen}>Forget Password</Button>
         </Stack>
       </Flex>
     </>
