@@ -223,7 +223,7 @@ function KanbanBoard() {
                   <Stack
                     direction={{ base: "column", lg: "row" }}
                     spacing={6}
-                    overflow="scroll"
+                    overflow="auto"
                   >
                     {data.map((value, index) =>
                       value.id === "completed" ? (

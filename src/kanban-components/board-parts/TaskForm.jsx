@@ -114,7 +114,7 @@ function TaskForm({
               </FormControl>
               <FormControl>
                 <FormLabel>Tag colour</FormLabel>
-                <Container overflow="scroll" padding={2}>
+                <Container overflow="auto" padding={2}>
                   <ButtonGroup
                     spacing={4}
                     variant="solid"
