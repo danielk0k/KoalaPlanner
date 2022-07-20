@@ -42,7 +42,7 @@ function Settings() {
             The Koala Planner is an NUS Orbital Project for Summer AY21/22 done
             by Daniel Kok and Grace Yeh.
           </Text>
-          <Text>App version 1.0</Text>
+          <Text>App version 2.0</Text>
         </Box>
       </Stack>
     </Navbar>

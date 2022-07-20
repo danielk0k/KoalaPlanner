@@ -97,20 +97,31 @@ function Dashboard() {
   };
 
   const dueThisWk = data
-    ? data.flatMap((column) => {
-        if (column.id === "completed") {
-          return [];
-        } else {
-          return column.items.filter((task) =>
-            isInThisWeek(task.content.due_date)
-          );
-        }
-      })
+    ? data
+        .flatMap((column) => {
+          if (column.id === "completed") {
+            return [];
+          } else {
+            return column.items.filter((task) =>
+              isInThisWeek(task.content.due_date)
+            );
+          }
+        })
+        .sort(
+          (task1, task2) =>
+            new Date(task1.content.due_date) - new Date(task2.content.due_date)
+        )
     : [];
 
   const completedThisWk =
     data && data.length > 0
-      ? data[0].items.filter((task) => isInThisWeek(task.content.completed_on))
+      ? data[0].items
+          .filter((task) => isInThisWeek(task.content.completed_on))
+          .sort(
+            (task1, task2) =>
+              new Date(task2.content.completed_on) -
+              new Date(task1.content.completed_on)
+          )
       : [];
 
   return (
