@@ -1,5 +1,7 @@
 # Koala Planner
 
+> Project has gone offline since May 2023
+
 Who says Koalas aren't hardworking?
 ![Login Page](assets/screenshot.png)
 
